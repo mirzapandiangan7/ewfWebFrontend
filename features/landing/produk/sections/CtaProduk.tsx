@@ -12,8 +12,8 @@ export default function CtaProduk() {
           profesional berlisensi resmi BAPPEBTI.
         </p>
 
-        <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-          <WhatsAppButton>Chat WhatsApp</WhatsAppButton>
+        <div className="mt-7 flex flex-wrap gap-3">
+          <WhatsAppButton />
         </div>
       </div>
     </section>

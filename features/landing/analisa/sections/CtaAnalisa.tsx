@@ -13,7 +13,7 @@ export default function CtaAnalisa() {
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-          <WhatsAppButton>Chat WhatsApp</WhatsAppButton>
+          <WhatsAppButton />
         </div>
       </div>
     </section>

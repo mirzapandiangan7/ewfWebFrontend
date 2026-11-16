@@ -9,8 +9,8 @@ export default function CtaLegal() {
           Konsultasikan kebutuhan investasi berjangka Anda bersama wakil
           pialang berlisensi resmi EWF.
         </p>
-        <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-          <WhatsAppButton>Chat WhatsApp</WhatsAppButton>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <WhatsAppButton />
         </div>
       </div>
     </section>

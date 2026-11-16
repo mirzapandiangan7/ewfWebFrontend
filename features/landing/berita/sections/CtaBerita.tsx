@@ -12,8 +12,8 @@ export default function CtaBerita() {
           Equityworld Futures untuk navigasi perdagangan berjangka yang objektif.
         </p>
 
-        <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-          <WhatsAppButton>Chat WhatsApp</WhatsAppButton>
+        <div className="mt-7 flex flex-wrap gap-3">
+          <WhatsAppButton />
         </div>
       </div>
     </section>
