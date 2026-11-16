@@ -19,7 +19,7 @@ export default function Products() {
         desc="Perdagangkan komoditi unggulan global dan indeks bursa terkemuka Asia."
       />
 
-      <div className="relative h-[clamp(420px,72svh,600px)] overflow-hidden">
+      <div className="relative h-[600px] overflow-hidden">
         <CircularGallery
           items={items}
           bend={3}

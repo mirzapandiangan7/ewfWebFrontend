@@ -6,7 +6,7 @@ import { productDetails } from "@/features/landing/produk/data";
 import { useIsDesktop } from "@/lib/useIsDesktop";
 
 export default function ProductDetails() {
-  const isDesktop = useIsDesktop(1024, 800);
+  const isDesktop = useIsDesktop();
 
   // Mobile / tablet: daftar biasa
   if (!isDesktop) {
@@ -42,7 +42,7 @@ export default function ProductDetails() {
               key={p.slug}
               itemClassName="h-auto! p-0! my-0! rounded-3xl! shadow-none! bg-transparent!"
             >
-              <ProductDetail product={p} reverse={i % 2 === 1} stacked />
+              <ProductDetail product={p} reverse={i % 2 === 1} />
             </ScrollStackItem>
           ))}
         </ScrollStack>
