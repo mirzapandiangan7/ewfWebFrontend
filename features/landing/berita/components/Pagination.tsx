@@ -10,18 +10,18 @@ import {
   useState,
   type MouseEvent,
 } from "react";
+import { newsHref, type NewsSort } from "../constants";
 
 type Props = {
   current: number;
   last: number;
+  sort: NewsSort;
 };
 
 const BAR_WIDTH = 20; // sama dengan kelas w-5 pada garis penanda
 
-const pageHref = (page: number) =>
-  page <= 1 ? "/berita#semua-berita" : `/berita?page=${page}#semua-berita`;
-
-export default function Pagination({ current, last }: Props) {
+export default function Pagination({ current, last, sort }: Props) {
+  const pageHref = (page: number) => newsHref(page, sort);
   // Halaman tujuan sementara: garis langsung bergeser saat diklik,
   // tanpa menunggu data halaman baru selesai dimuat.
   const [prevCurrent, setPrevCurrent] = useState(current);

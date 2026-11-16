@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getNews } from "./api";
+import { getNews, getOldestNews } from "./api";
+import type { NewsSort } from "./constants";
 import type { NewsResponse } from "./types";
 import Hero from "./sections/Hero";
 import FeaturedNews from "./sections/FeaturedNews";
@@ -8,13 +9,14 @@ import CtaBerita from "./sections/CtaBerita";
 
 type Props = {
   page: number;
+  sort: NewsSort;
 };
 
-export default async function BeritaPage({ page }: Props) {
+export default async function BeritaPage({ page, sort }: Props) {
   let news: NewsResponse | null = null;
 
   try {
-    news = await getNews(page);
+    news = sort === "oldest" ? await getOldestNews(page) : await getNews(page);
   } catch {
     news = null;
   }
@@ -26,11 +28,10 @@ export default async function BeritaPage({ page }: Props) {
   return (
     <>
       <Hero />
-
-      {featured && <FeaturedNews item={featured} />}
+      {featured && <FeaturedNews item={featured} sort={sort} />}
 
       {news && items.length > 0 ? (
-        <NewsGrid items={items} meta={news.meta} />
+        <NewsGrid items={items} meta={news.meta} sort={sort} />
       ) : (
         <section id="semua-berita" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
           <div className="rounded-3xl border border-softgrey bg-white p-10 text-center">

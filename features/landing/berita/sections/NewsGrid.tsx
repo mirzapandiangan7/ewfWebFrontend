@@ -1,7 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import Pagination from "../components/Pagination";
 import type { NewsItem, NewsResponse } from "../types";
-import { MAX_PAGES } from "../constants";
+import Link from "next/link";
+import { MAX_PAGES, SORT_OPTIONS, newsHref, type NewsSort } from "../constants";
 import NewsImage from "../components/NewsImage";
 import CategoryTag from "../components/CategoryTag";
 import { formatDate } from "@/lib/format";
@@ -9,6 +10,7 @@ import { formatDate } from "@/lib/format";
 type Props = {
   items: NewsItem[];
   meta: NewsResponse["meta"];
+  sort: NewsSort;
 };
 
 function NewsCard({ item }: { item: NewsItem }) {
@@ -49,7 +51,7 @@ function NewsCard({ item }: { item: NewsItem }) {
   );
 }
 
-export default function NewsGrid({ items, meta }: Props) {
+export default function NewsGrid({ items, meta, sort }: Props) {
   const current = meta.current_page;
   const last = Math.min(meta.last_page, MAX_PAGES);
 
@@ -62,12 +64,27 @@ export default function NewsGrid({ items, meta }: Props) {
             Arsip informasi terverifikasi dan analisis komprehensif
           </p>
         </div>
-        <p className="flex items-center gap-2 text-xs text-muted">
-          Urutkan:
-          <span className="rounded-lg border border-softgrey bg-white px-4 py-2 font-medium text-ink">
-            Terbaru
-          </span>
-        </p>
+        <div className="flex items-center gap-2 text-xs text-muted">
+          <span id="urutkan-label">Urutkan:</span>
+          <div
+            role="group"
+            aria-labelledby="urutkan-label"
+            className="inline-flex rounded-lg border border-softgrey bg-white p-1"
+          >
+            {SORT_OPTIONS.map((o) => (
+              <Link
+                key={o.value}
+                href={newsHref(1, o.value, "berita-terbaru")}
+                aria-current={o.value === sort ? "true" : undefined}
+                className={`rounded-md px-3.5 py-1.5 font-semibold transition-colors ${
+                  o.value === sort ? "bg-navy text-white" : "text-muted hover:text-ink"
+                }`}
+              >
+                {o.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -78,7 +95,7 @@ export default function NewsGrid({ items, meta }: Props) {
 
       {last > 1 && (
         <div className="mt-10 flex justify-end">
-          <Pagination current={current} last={last} />
+          <Pagination current={current} last={last} sort={sort} />
         </div>
       )}
     </section>

@@ -2,8 +2,21 @@ import { formatDate } from "@/lib/format";
 import CategoryTag from "../components/CategoryTag";
 import NewsImage from "../components/NewsImage";
 import type { NewsItem } from "../types";
+import type { NewsSort } from "../constants";
 
-export default function FeaturedNews({ item }: { item: NewsItem }) {
+const COPY: Record<NewsSort, { title: string; desc: string }> = {
+  newest: {
+    title: "Berita Terbaru",
+    desc: "Perkembangan pasar komoditi dan indeks bursa terkini hari ini",
+  },
+  oldest: {
+    title: "Berita Terlama",
+    desc: "Arsip berita paling awal yang tersedia",
+  },
+};
+
+export default function FeaturedNews({ item, sort }: { item: NewsItem; sort: NewsSort }) {
+  const copy = COPY[sort];
   const Wrapper = item.url ? "a" : "div";
   const link = item.url
     ? { href: item.url, target: "_blank", rel: "noopener noreferrer" }
@@ -12,10 +25,8 @@ export default function FeaturedNews({ item }: { item: NewsItem }) {
   return (
     <section id="berita-terbaru" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
       <div>
-        <h2 className="type-h2 text-ink">Berita Terbaru</h2>
-        <p className="type-body mt-1 text-muted">
-          Perkembangan pasar komoditi dan indeks bursa terkini hari ini
-        </p>
+        <h2 className="type-h2 text-ink">{copy.title}</h2>
+        <p className="type-body mt-1 text-muted">{copy.desc}</p>
       </div>
 
       <Wrapper
