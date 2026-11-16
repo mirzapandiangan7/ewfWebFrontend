@@ -3,17 +3,17 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { ProductDetail as Product } from "@/features/landing/produk/data";
 
-type Props = { product: Product; reverse?: boolean };
+type Props = { product: Product; reverse?: boolean; stacked?: boolean };
 
-export default function ProductDetail({ product: p, reverse }: Props) {
+export default function ProductDetail({ product: p, reverse, stacked }: Props) {
   const chip = reverse ? "bg-white shadow-sm" : "bg-softgrey";
 
   return (
     <article
       id={p.slug}
-      className={`scroll-mt-24 rounded-3xl border border-black/5 p-5 shadow-xl lg:flex lg:min-h-[38rem] lg:items-center lg:p-6 ${
-        reverse ? "bg-softgrey" : "bg-white"
-      }`}
+      className={`scroll-mt-24 rounded-3xl border border-black/5 p-5 shadow-xl lg:flex lg:items-center lg:p-6 ${
+        stacked ? "lg:min-h-[36rem]" : ""
+      } ${reverse ? "bg-softgrey" : "bg-white"}`}
     >
       <div className="grid w-full gap-8 lg:grid-cols-2 lg:items-stretch">
         <div className={`${reverse ? "lg:order-2" : ""} lg:h-full`}>
