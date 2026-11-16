@@ -1,4 +1,3 @@
-import { ChevronRight } from "lucide-react";
 import { formatDate } from "@/lib/format";
 import CategoryTag from "../components/CategoryTag";
 import NewsImage from "../components/NewsImage";
@@ -12,19 +11,11 @@ export default function FeaturedNews({ item }: { item: NewsItem }) {
 
   return (
     <section id="berita-terbaru" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
-      <div className="flex items-end justify-between gap-4">
-        <div>
-          <h2 className="type-h2 text-ink">Berita Terbaru</h2>
-          <p className="type-body mt-1 text-muted">
-            Perkembangan pasar komoditi dan indeks bursa terkini hari ini
-          </p>
-        </div>
-        <a
-          href="#semua-berita"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:underline"
-        >
-          Lihat Semua Berita <ChevronRight size={14} />
-        </a>
+      <div>
+        <h2 className="type-h2 text-ink">Berita Terbaru</h2>
+        <p className="type-body mt-1 text-muted">
+          Perkembangan pasar komoditi dan indeks bursa terkini hari ini
+        </p>
       </div>
 
       <Wrapper
