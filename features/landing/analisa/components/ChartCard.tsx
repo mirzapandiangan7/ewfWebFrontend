@@ -69,7 +69,7 @@ export default function ChartCard({ short, symbol, active }: Props) {
         </div>
       </div>
 
-      <div ref={frameRef} className="mt-4 h-[420px] overflow-hidden rounded-xl bg-white">
+      <div ref={frameRef} className="mt-4 h-[26.25rem] overflow-hidden rounded-xl bg-white">
         {active && symbol ? (
           <TradingViewChart
             symbol={symbol}
