@@ -1,6 +1,4 @@
-import { MessageCircle } from "lucide-react";
-import SpecularLink from "@/components/ui/SpecularLink";
-import { WHATSAPP_URL } from "@/features/landing/shared/data/contact";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 export default function CtaConsult() {
   return (
@@ -19,9 +17,7 @@ export default function CtaConsult() {
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-          <SpecularLink href={WHATSAPP_URL} variant="light">
-            <MessageCircle size={16} className="text-bull" /> Chat WhatsApp Resmi
-          </SpecularLink>
+          <WhatsAppButton>Chat WhatsApp Resmi</WhatsAppButton>
         </div>
       </div>
     </section>

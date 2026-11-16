@@ -1,6 +1,4 @@
-import { MessageCircle } from "lucide-react";
-import SpecularLink from "@/components/ui/SpecularLink";
-import { WHATSAPP_URL } from "@/features/landing/shared/data/contact";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 export default function CtaLegal() {
   return (
@@ -11,10 +9,8 @@ export default function CtaLegal() {
           Konsultasikan kebutuhan investasi berjangka Anda bersama wakil
           pialang berlisensi resmi EWF.
         </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <SpecularLink href={WHATSAPP_URL} variant="light">
-            <MessageCircle size={16} className="text-bull" /> Chat WhatsApp
-          </SpecularLink>
+        <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+          <WhatsAppButton>Chat WhatsApp</WhatsAppButton>
         </div>
       </div>
     </section>
