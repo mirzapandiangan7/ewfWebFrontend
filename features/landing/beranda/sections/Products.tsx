@@ -27,6 +27,8 @@ export default function Products() {
           borderRadius={0.06}
           font="700 28px var(--font-jakarta), sans-serif"
           itemSize={1.05}
+          autoScroll={1}
+          wheelScroll={false}
         />
       </div>
     </section>

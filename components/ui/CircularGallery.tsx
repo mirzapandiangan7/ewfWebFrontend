@@ -30,6 +30,8 @@ export interface CircularGalleryProps extends Omit<HTMLAttributes<HTMLDivElement
   showTitles?: boolean;
   snap?: boolean;
   autoScroll?: number;
+  /** false = roda mouse tidak menggeser galeri, halaman tetap bisa di-scroll di atasnya */
+  wheelScroll?: boolean;
   openOnClick?: boolean;
   intro?: boolean;
   onItemClick?: (item: GalleryItem, index: number) => void;
@@ -55,6 +57,7 @@ type Settings = {
   showTitles: boolean;
   snap: boolean;
   autoScroll: number;
+  wheelScroll: boolean;
   openOnClick: boolean;
   intro: boolean;
   onItemClick?: (item: GalleryItem, index: number) => void;
@@ -374,6 +377,7 @@ const CircularGallery = ({
   showTitles = true,
   snap = true,
   autoScroll = 0,
+  wheelScroll = true,
   openOnClick = true,
   intro = true,
   onItemClick,
@@ -410,6 +414,7 @@ const CircularGallery = ({
     showTitles,
     snap,
     autoScroll,
+    wheelScroll,
     openOnClick,
     intro,
     onItemClick,
@@ -1044,6 +1049,7 @@ const CircularGallery = ({
     };
 
     const onWheel = (event: WheelEvent) => {
+      if (!settingsRef.current.wheelScroll) return; // biarkan halaman yang di-scroll
       const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? view.height : 1;
       const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
       if (!delta) return;
