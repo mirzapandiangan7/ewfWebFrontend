@@ -501,7 +501,7 @@ const SpecularButton = ({
     >
       <canvas
         ref={canvasRef}
-        className="pointer-events-none absolute -inset-6 z-[1] block h-[calc(100%+48px)] w-[calc(100%+48px)]"
+        className="pointer-events-none absolute -inset-[24px] z-[1] block h-[calc(100%+48px)] w-[calc(100%+48px)]"
         aria-hidden="true"
       />
       <span className="relative z-[2] inline-flex items-center gap-[inherit]">{children}</span>
