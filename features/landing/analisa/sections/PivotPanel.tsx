@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Calculator } from "lucide-react";
 import SlidingTabs from "@/components/ui/SlidingTabs";
 import { formatDate, formatNumber, formatSigned } from "../../../../lib/format";
@@ -9,6 +10,7 @@ import { priceText } from "../constants";
 import type { Instrument, PivotResponse } from "../types";
 import DatePicker from "@/components/ui/DatePicker";
 import Select from "@/components/ui/Select";
+import RevealGroup from "@/components/ui/RevealGroup";
 
 export type PivotPreset = { slug: string; date: string; id: number };
 
@@ -29,7 +31,13 @@ function isSameInput(a: RequestInput, b: RequestInput) {
   if (a.mode === "historis") {
     return b.mode === "historis" && a.slug === b.slug && a.date === b.date;
   }
-  return b.mode === "manual" && a.high === b.high && a.low === b.low && a.close === b.close;
+
+  return (
+    b.mode === "manual" &&
+    a.high === b.high &&
+    a.low === b.low &&
+    a.close === b.close
+  );
 }
 
 const ROWS = [
@@ -80,25 +88,44 @@ const ACTIONS = [
   },
 ] as const;
 
-const label = "type-micro mb-1.5 block font-semibold uppercase tracking-[0.1em] text-muted";
+const label =
+  "type-micro mb-1.5 block font-semibold uppercase tracking-[0.1em] text-muted";
+
 const field =
   "w-full rounded-xl border border-softgrey bg-white px-3 py-2.5 text-[13px] font-medium text-ink outline-none transition focus:border-brand";
+
+const rowDelay = (ms: number) =>
+  ({ "--row-delay": `${ms}ms` }) as CSSProperties;
 
 export default function PivotPanel({ instruments, preset }: Props) {
   const [mode, setMode] = useState<Mode>("historis");
   const [slug, setSlug] = useState(preset?.slug ?? "gold");
   const [date, setDate] = useState(preset?.date ?? "");
-  const [manual, setManual] = useState({ high: "", low: "", close: "" });
+  const [manual, setManual] = useState({
+    high: "",
+    low: "",
+    close: "",
+  });
   const [formError, setFormError] = useState("");
 
   // Tanpa preset, hasil baru muncul setelah tombol "Hitung Pivot Point" diklik.
   // Preset datang dari tombol Pivot di tabel historis, jadi langsung dihitung.
   const [request, setRequest] = useState<Request | null>(
-    preset ? { id: 1, mode: "historis", slug: preset.slug, date: preset.date } : null,
+    preset
+      ? {
+          id: 1,
+          mode: "historis",
+          slug: preset.slug,
+          date: preset.date,
+        }
+      : null,
   );
-  const [result, setResult] = useState<{ id: number; data?: PivotResponse; error?: string } | null>(
-    null,
-  );
+
+  const [result, setResult] = useState<{
+    id: number;
+    data?: PivotResponse;
+    error?: string;
+  } | null>(null);
 
   const loading = request !== null && result?.id !== request.id;
 
@@ -107,11 +134,20 @@ export default function PivotPanel({ instruments, preset }: Props) {
 
     const { id } = request;
     const controller = new AbortController();
+
     const run =
       request.mode === "historis"
-        ? getPivot(request.slug, request.date || undefined, controller.signal)
+        ? getPivot(
+            request.slug,
+            request.date || undefined,
+            controller.signal,
+          )
         : calculatePivot(
-            { high: request.high, low: request.low, close: request.close },
+            {
+              high: request.high,
+              low: request.low,
+              close: request.close,
+            },
             controller.signal,
           );
 
@@ -119,9 +155,13 @@ export default function PivotPanel({ instruments, preset }: Props) {
       .then((data: PivotResponse) => setResult({ id, data }))
       .catch((e: unknown) => {
         if (controller.signal.aborted) return;
+
         setResult({
           id,
-          error: e instanceof Error ? e.message : "Perhitungan gagal. Coba lagi.",
+          error:
+            e instanceof Error
+              ? e.message
+              : "Perhitungan gagal. Coba lagi.",
         });
       });
 
@@ -150,26 +190,38 @@ export default function PivotPanel({ instruments, preset }: Props) {
     draft !== null &&
     isSameInput(request, draft);
 
-const submit = (e: React.FormEvent) => {
-  e.preventDefault();
-  setFormError("");
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError("");
 
-  if (mode === "historis") {
-    const missing = [!slug && "produk", !date && "tanggal"].filter(Boolean);
-    if (missing.length > 0) {
-      setFormError(`Pilih ${missing.join(" dan ")} terlebih dahulu.`);
+    if (mode === "historis") {
+      const missing = [
+        !slug && "produk",
+        !date && "tanggal",
+      ].filter(Boolean);
+
+      if (missing.length > 0) {
+        setFormError(
+          `Pilih ${missing.join(" dan ")} terlebih dahulu.`,
+        );
+        return;
+      }
+    }
+
+    if (!draft) {
+      setFormError(
+        "Isi nilai High, Low, dan Close terlebih dahulu.",
+      );
       return;
     }
-  }
 
-  if (!draft) {
-    setFormError("Isi nilai High, Low, dan Close terlebih dahulu.");
-    return;
-  }
-  if (loading || upToDate) return;
+    if (loading || upToDate) return;
 
-  setRequest((r) => ({ ...draft, id: (r?.id ?? 0) + 1 }));
-};
+    setRequest((r) => ({
+      ...draft,
+      id: (r?.id ?? 0) + 1,
+    }));
+  };
 
   const data = result?.data;
 
@@ -186,6 +238,7 @@ const submit = (e: React.FormEvent) => {
     : data?.input
       ? { open: null as number | null, ...data.input }
       : null;
+
   const cards = ohlc
     ? ([
         ["Open", ohlc.open],
@@ -196,122 +249,160 @@ const submit = (e: React.FormEvent) => {
     : [];
 
   const signal = data?.signal ?? null;
-  const action = signal ? (ACTIONS.find((a) => a.bias === signal.bias) ?? ACTIONS[2]) : null;
+
+  const action = signal
+    ? (ACTIONS.find((a) => a.bias === signal.bias) ?? ACTIONS[2])
+    : null;
 
   return (
     <div className="rounded-3xl border border-softgrey bg-white p-5 shadow-sm sm:p-8">
-      <div className="border-b border-softgrey pb-6">
-        <p className="type-label flex items-center gap-2 text-brand">
-          <Calculator size={14} /> Pivot Point
-        </p>
-        <h2 className="type-h2 mt-2 text-ink">Kalkulator Pivot Point</h2>
-        <p className="type-body mt-1 text-muted">
-          Hitung level support, resistance, dan midpoint dari data historis resmi atau dari nilai
-          High, Low, dan Close yang Anda masukkan.
-        </p>
-      </div>
+      <RevealGroup threshold={0.1}>
+        <div className="reveal-item border-b border-softgrey pb-6">
+          <p className="type-label flex items-center gap-2 text-brand">
+            <Calculator size={14} /> Pivot Point
+          </p>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
-        <form onSubmit={submit} className="space-y-4 rounded-2xl bg-softgrey p-5">
-          <SlidingTabs
-            ariaLabel="Sumber data"
-            value={mode}
-            onChange={setMode}
-            options={[
-              { value: "historis", label: "Dari Data Historis" },
-              { value: "manual", label: "Input Manual" },
-            ]}
-          />
+          <h2 className="type-h2 mt-2 text-ink">
+            Kalkulator Pivot Point
+          </h2>
 
-          {mode === "historis" ? (
-            <>
-              <div>
-                <label htmlFor="pivot-instrumen" className={label}>
-                  Produk
-                </label>
-                <Select
-                  id="pivot-instrumen"
-                  value={slug}
-                  onChange={(v) => {
-                    setSlug(v);
-                    setFormError("");
-                  }}
-                  options={
-                    instruments.length === 0
-                      ? [{ value: slug, label: "Memuat…" }]
-                      : instruments.map((i) => ({ value: i.slug, label: i.label }))
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="pivot-tanggal" className={label}>
-                  Tanggal
-                </label>
-                <DatePicker
-                  id="pivot-tanggal"
-                  value={date}
-                  onChange={(v) => {
-                    setDate(v);
-                    setFormError("");
-                  }}
-                />
-              </div>
-            </>
-          ) : (
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {(["high", "low", "close"] as const).map((k) => (
-                <div key={k}>
-                  <label htmlFor={`pivot-${k}`} className={label}>
-                    {k}
+          <p className="type-body mt-1 text-muted">
+            Hitung level support, resistance, dan midpoint dari data
+            historis resmi atau dari nilai High, Low, dan Close yang
+            Anda masukkan.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
+          <form
+            onSubmit={submit}
+            className="reveal-left space-y-4 rounded-2xl bg-softgrey p-5"
+          >
+            <SlidingTabs
+              ariaLabel="Sumber data"
+              value={mode}
+              onChange={setMode}
+              options={[
+                { value: "historis", label: "Dari Data Historis" },
+                { value: "manual", label: "Input Manual" },
+              ]}
+            />
+
+            {mode === "historis" ? (
+              <>
+                <div>
+                  <label htmlFor="pivot-instrumen" className={label}>
+                    Produk
                   </label>
-                  <input
-                    id={`pivot-${k}`}
-                    type="number"
-                    step="any"
-                    inputMode="decimal"
-                    className={field}
-                    value={manual[k]}
-                    onChange={(e) => setManual((m) => ({ ...m, [k]: e.target.value }))}
+
+                  <Select
+                    id="pivot-instrumen"
+                    value={slug}
+                    onChange={(v) => {
+                      setSlug(v);
+                      setFormError("");
+                    }}
+                    options={
+                      instruments.length === 0
+                        ? [{ value: slug, label: "Memuat…" }]
+                        : instruments.map((i) => ({
+                            value: i.slug,
+                            label: i.label,
+                          }))
+                    }
                   />
                 </div>
-              ))}
-            </div>
-          )}
 
-          {formError && (
-            <p role="alert" className="text-xs font-medium text-bear">
-              {formError}
-            </p>
-          )}
+                <div>
+                  <label htmlFor="pivot-tanggal" className={label}>
+                    Tanggal
+                  </label>
 
-          <button
-            type="submit"
-            disabled={loading || upToDate}
-            className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <Calculator size={14} /> {loading ? "Menghitung…" : "Hitung Pivot Point"}
-          </button>
-        </form>
+                  <DatePicker
+                    id="pivot-tanggal"
+                    value={date}
+                    onChange={(v) => {
+                      setDate(v);
+                      setFormError("");
+                    }}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                {(["high", "low", "close"] as const).map((k) => (
+                  <div key={k}>
+                    <label htmlFor={`pivot-${k}`} className={label}>
+                      {k}
+                    </label>
 
-        <div>
-          {!request ? (
-            <div className="grid min-h-80 place-items-center rounded-2xl border border-dashed border-softgrey bg-surface p-8 text-center">
-              <div>
-                <Calculator size={28} className="mx-auto text-muted" />
-                <p className="mt-3 font-semibold text-ink">Belum ada perhitungan</p>
-                <p className="type-body mt-1 text-muted">
-                  Pilih produk dan tanggal, lalu klik “Hitung Pivot Point” untuk menampilkan level pivot.
+                    <input
+                      id={`pivot-${k}`}
+                      type="number"
+                      step="any"
+                      inputMode="decimal"
+                      className={field}
+                      value={manual[k]}
+                      onChange={(e) =>
+                        setManual((m) => ({
+                          ...m,
+                          [k]: e.target.value,
+                        }))
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {formError && (
+              <p role="alert" className="text-xs font-medium text-bear">
+                {formError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading || upToDate}
+              className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Calculator size={14} />
+              {loading ? "Menghitung…" : "Hitung Pivot Point"}
+            </button>
+          </form>
+
+          <div className="reveal-right">
+            {!request ? (
+              <div className="grid min-h-80 place-items-center rounded-2xl border border-dashed border-softgrey bg-surface p-8 text-center">
+                <div>
+                  <Calculator size={28} className="mx-auto text-muted" />
+
+                  <p className="mt-3 font-semibold text-ink">
+                    Belum ada perhitungan
+                  </p>
+
+                  <p className="type-body mt-1 text-muted">
+                    Pilih produk dan tanggal, lalu klik “Hitung Pivot
+                    Point” untuk menampilkan level pivot.
+                  </p>
+                </div>
+              </div>
+            ) : !loading && result?.error ? (
+              <div
+                role="alert"
+                className="rounded-2xl border border-bear/30 bg-bear/5 p-6 text-center"
+              >
+                <p className="font-semibold text-ink">
+                  {result.error}
                 </p>
               </div>
-            </div>
-          ) : !loading && result?.error ? (
-            <div role="alert" className="rounded-2xl border border-bear/30 bg-bear/5 p-6 text-center">
-              <p className="font-semibold text-ink">{result.error}</p>
-            </div>
-          ) : !data ? (
-            <div className="h-80 animate-pulse rounded-2xl bg-surface" />
-          ) : (
-            <div className={loading ? "opacity-60" : ""}>
+            ) : !data ? (
+              <div className="h-80 animate-pulse rounded-2xl bg-surface" />
+            ) : (
+              <div
+                key={result?.id}
+                className={loading ? "opacity-60" : ""}
+              >
                 {/* Tanggal */}
                 {data.basis ? (
                   <div className="flex flex-wrap gap-x-10 gap-y-3">
@@ -319,14 +410,19 @@ const submit = (e: React.FormEvent) => {
                       <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
                         Tanggal Pivot Point
                       </p>
+
                       <p className="font-display text-lg font-extrabold text-ink">
-                        {formatDate(data.target_date ?? data.basis.date)}
+                        {formatDate(
+                          data.target_date ?? data.basis.date,
+                        )}
                       </p>
                     </div>
+
                     <div>
                       <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
                         Tanggal Data
                       </p>
+
                       <p className="font-display text-lg font-extrabold text-ink">
                         {formatDate(data.basis.date)}
                       </p>
@@ -337,123 +433,166 @@ const submit = (e: React.FormEvent) => {
                     <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
                       Sumber Data
                     </p>
-                    <p className="font-display text-lg font-extrabold text-ink">Input Manual</p>
+
+                    <p className="font-display text-lg font-extrabold text-ink">
+                      Input Manual
+                    </p>
                   </div>
                 )}
 
-              {/* Kartu OHLC */}
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {cards.map(([name, value]) => (
-                  <div key={name} className="rounded-2xl bg-softgrey p-3">
-                    <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
-                      {name}
-                    </p>
-                    <p className="mt-1 text-base font-extrabold text-ink xl:text-lg">
-                      {value == null ? "–" : priceText(prefix, formatNumber(value))}
-                    </p>
-                  </div>
-                ))}
-              </div>
+                {/* Kartu OHLC */}
+                <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {cards.map(([name, value], i) => (
+                    <div
+                      key={name}
+                      className="row-in rounded-2xl bg-softgrey p-3"
+                      style={rowDelay(i * 70)}
+                    >
+                      <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
+                        {name}
+                      </p>
 
-              {/* Tabel pivot point */}
-              <div className="mt-4 overflow-hidden rounded-2xl border border-softgrey">
-                <table className="w-full text-[13px]">
-                  <thead className="bg-navy text-left text-white">
-                    <tr>
-                      <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em]">
-                        Level
-                      </th>
-                      <th className="px-4 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.1em]">
-                        Harga
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ROWS.map(([key, text, kind]) => {
-                      const value =
-                        kind === "m"
-                          ? data.midpoints[key as keyof typeof data.midpoints]
-                          : data.levels[key as keyof typeof data.levels];
-                      const tone =
-                        kind === "r"
-                          ? "text-bear"
-                          : kind === "s"
-                            ? "text-bull"
-                            : kind === "p"
-                              ? "text-brand"
-                              : "text-muted";
-
-                      return (
-                        <tr
-                          key={key}
-                          className={`border-t border-softgrey ${kind === "p" ? "bg-brand/5" : ""}`}
-                        >
-                          <td
-                            className={`px-4 ${kind === "m" ? "py-1.5 pl-8 text-xs italic" : "py-3 font-semibold"} ${tone}`}
-                          >
-                            {text}
-                          </td>
-                          <td
-                            className={`px-4 text-right ${kind === "m" ? "py-1.5 text-xs text-muted" : "py-3 font-semibold text-ink"}`}
-                          >
-                            {formatNumber(value)}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Indikator aksi */}
-              <div className="mt-4 rounded-2xl border border-softgrey p-4">
-                <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
-                  Indikator Aksi
-                </p>
-
-                {signal && action ? (
-                  <>
-                    <div className="mt-3 flex flex-wrap items-center gap-3">
-                      <span className={`rounded-xl px-5 py-2 text-lg font-extrabold ${action.badge}`}>
-                        {action.label}
-                      </span>
-                      <p className="text-[13px] font-medium text-ink">
-                        Open {priceText(prefix, formatNumber(signal.open))} {action.relation} PP{" "}
-                        {formatNumber(signal.pivot_point)} (selisih {formatSigned(signal.diff)})
+                      <p className="mt-1 text-base font-extrabold text-ink xl:text-lg">
+                        {value == null
+                          ? "–"
+                          : priceText(prefix, formatNumber(value))}
                       </p>
                     </div>
+                  ))}
+                </div>
 
-                    <ul className="mt-3 grid gap-2 sm:grid-cols-3">
-                      {ACTIONS.map((a) => (
-                        <li
-                          key={a.bias}
-                          className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold ${
-                            a.bias === signal.bias ? a.box : "border-softgrey text-muted"
-                          }`}
-                        >
-                          <span>{a.rule}</span>
-                          <span>{a.label}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                ) : (
-                  <p className="mt-2 text-[13px] text-muted">
-                    {data.basis
-                      ? "Harga Open untuk tanggal analisa belum tersedia."
-                      : "Indikator aksi memerlukan harga Open, jadi hanya tersedia pada mode “Dari Data Historis”."}
+                {/* Tabel pivot point */}
+                <div className="mt-4 overflow-hidden rounded-2xl border border-softgrey">
+                  <table className="w-full text-[13px]">
+                    <thead className="bg-navy text-left text-white">
+                      <tr>
+                        <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.1em]">
+                          Level
+                        </th>
+
+                        <th className="px-4 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.1em]">
+                          Harga
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {ROWS.map(([key, text, kind], i) => {
+                        const value =
+                          kind === "m"
+                            ? data.midpoints[
+                                key as keyof typeof data.midpoints
+                              ]
+                            : data.levels[
+                                key as keyof typeof data.levels
+                              ];
+
+                        const tone =
+                          kind === "r"
+                            ? "text-bear"
+                            : kind === "s"
+                              ? "text-bull"
+                              : kind === "p"
+                                ? "text-brand"
+                                : "text-muted";
+
+                        return (
+                          <tr
+                            key={key}
+                            className={`row-in border-t border-softgrey ${
+                              kind === "p" ? "bg-brand/5" : ""
+                            }`}
+                            style={rowDelay(280 + i * 30)}
+                          >
+                            <td
+                              className={`px-4 ${
+                                kind === "m"
+                                  ? "py-1.5 pl-8 text-xs italic"
+                                  : "py-3 font-semibold"
+                              } ${tone}`}
+                            >
+                              {text}
+                            </td>
+
+                            <td
+                              className={`px-4 text-right ${
+                                kind === "m"
+                                  ? "py-1.5 text-xs text-muted"
+                                  : "py-3 font-semibold text-ink"
+                              }`}
+                            >
+                              {formatNumber(value)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Indikator aksi */}
+                <div
+                  className="row-in mt-4 rounded-2xl border border-softgrey p-4"
+                  style={rowDelay(800)}
+                >
+                  <p className="type-micro font-semibold uppercase tracking-[0.1em] text-muted">
+                    Indikator Aksi
                   </p>
-                )}
-              </div>
 
-              <p className="type-micro mt-3 text-muted">
-                Level pivot dan indikator aksi adalah alat bantu analisa teknikal, bukan ajakan atau
-                saran investasi.
-              </p>
-            </div>
-          )}
+                  {signal && action ? (
+                    <>
+                      <div className="mt-3 flex flex-wrap items-center gap-3">
+                        <span
+                          className={`rounded-xl px-5 py-2 text-lg font-extrabold ${action.badge}`}
+                        >
+                          {action.label}
+                        </span>
+
+                        <p className="text-[13px] font-medium text-ink">
+                          Open {priceText(
+                            prefix,
+                            formatNumber(signal.open),
+                          )}{" "}
+                          {action.relation} PP{" "}
+                          {formatNumber(signal.pivot_point)} (selisih{" "}
+                          {formatSigned(signal.diff)})
+                        </p>
+                      </div>
+
+                      <ul className="mt-3 grid gap-2 sm:grid-cols-3">
+                        {ACTIONS.map((a) => (
+                          <li
+                            key={a.bias}
+                            className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs font-semibold ${
+                              a.bias === signal.bias
+                                ? a.box
+                                : "border-softgrey text-muted"
+                            }`}
+                          >
+                            <span>{a.rule}</span>
+                            <span>{a.label}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <p className="mt-2 text-[13px] text-muted">
+                      {data.basis
+                        ? "Harga Open untuk tanggal analisa belum tersedia."
+                        : "Indikator aksi memerlukan harga Open, jadi hanya tersedia pada mode “Dari Data Historis”."}
+                    </p>
+                  )}
+                </div>
+
+                <p className="type-micro mt-3 text-muted">
+                  Level pivot dan indikator aksi adalah alat bantu analisa
+                  teknikal, bukan ajakan atau saran investasi.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </RevealGroup>
     </div>
   );
 }

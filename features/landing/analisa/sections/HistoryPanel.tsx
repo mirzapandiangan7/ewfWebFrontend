@@ -8,6 +8,8 @@ import HistoryTable from "../components/HistoryTable";
 import InstrumentTabs from "../components/InstrumentTabs";
 import { exportUrl, getHistory, getLive } from "../api";
 import type { Filters, HistoryResponse, Instrument } from "../types";
+import RevealGroup from "@/components/ui/RevealGroup";
+import { delay } from "@/lib/reveal";
 
 type Props = {
   instruments: Instrument[];
@@ -91,84 +93,90 @@ export default function HistoryPanel({ instruments, active, onPivot }: Props) {
 
   return (
     <div className="rounded-3xl border border-softgrey bg-white p-5 shadow-sm sm:p-8">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-softgrey pb-6">
-        <div>
-          <p className="type-label flex items-center gap-2 text-brand">
-            <History size={14} /> Market History
-          </p>
-          <h2 className="type-h2 mt-2 text-ink">Data Historis Pasar</h2>
-          <p className="type-body mt-1 text-muted">
-            Pantau pergerakan harga dari waktu ke waktu dengan keterbukaan data riil bursa
-            berjangka.
+      <RevealGroup threshold={0.1}>
+        <div className="reveal-item flex flex-wrap items-end justify-between gap-4 border-b border-softgrey pb-6">
+          <div>
+            <p className="type-label flex items-center gap-2 text-brand">
+              <History size={14} /> Market History
+            </p>
+            <h2 className="type-h2 mt-2 text-ink">Data Historis Pasar</h2>
+            <p className="type-body mt-1 text-muted">
+              Pantau pergerakan harga dari waktu ke waktu dengan keterbukaan data riil bursa
+              berjangka.
+            </p>
+          </div>
+
+          <p className="flex items-center gap-2 text-xs text-muted">
+            Status Data:
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold ${
+                feed === false ? "bg-softgrey text-muted" : "bg-bull/10 text-bull"
+              }`}
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${feed === false ? "bg-muted" : "bg-bull"}`}
+              />
+              {feed === null ? "Memeriksa…" : feed ? "Realtime Feeds Aktif" : "Realtime Tidak Tersedia"}
+            </span>
           </p>
         </div>
 
-        <p className="flex items-center gap-2 text-xs text-muted">
-          Status Data:
-          <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold ${
-              feed === false ? "bg-softgrey text-muted" : "bg-bull/10 text-bull"
-            }`}
-          >
-            <span
-              className={`h-1.5 w-1.5 rounded-full ${feed === false ? "bg-muted" : "bg-bull"}`}
-            />
-            {feed === null ? "Memeriksa…" : feed ? "Realtime Feeds Aktif" : "Realtime Tidak Tersedia"}
-          </span>
-        </p>
-      </div>
-
-      {/* 1. Produk (dipakai grafik dan tabel) */}
-      <div className="mt-6">
-        <InstrumentTabs
-          instruments={instruments}
-          value={applied.slug}
-          onChange={changeInstrument}
-        />
-      </div>
+        {/* 1. Produk (dipakai grafik dan tabel) */}
+        <div className="reveal-item mt-6" style={delay(120)}>
+          <InstrumentTabs instruments={instruments} value={applied.slug} onChange={changeInstrument} />
+        </div>
+      </RevealGroup>
 
       {/* 2. Grafik: hanya interval dan tipe grafik */}
       <div className="mt-6">
-        <ChartCard
-          short={selected?.short ?? "…"}
-          symbol={selected?.tradingview_symbol ?? null}
-          active={active}
-        />
+        <RevealGroup threshold={0.1}>
+          <div className="reveal-zoom">
+            <ChartCard
+              short={selected?.short ?? "…"}
+              symbol={selected?.tradingview_symbol ?? null}
+              active={active}
+            />
+          </div>
+        </RevealGroup>
       </div>
 
       {/* 3. Data historis: rentang tanggal, tabel, pagination */}
       <div className="mt-8">
-        {failed ? (
-          <div role="alert" className="rounded-2xl border border-bear/30 bg-bear/5 p-6 text-center">
-            <p className="font-semibold text-ink">{error?.message}</p>
-            <button
-              type="button"
-              onClick={() => setApplied((a) => ({ ...a }))}
-              className="mt-3 rounded-xl bg-brand px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-brand/90"
-            >
-              Coba Lagi
-            </button>
+        <RevealGroup threshold={0.05}>
+          <div className="reveal-item">
+          {failed ? (
+            <div role="alert" className="rounded-2xl border border-bear/30 bg-bear/5 p-6 text-center">
+              <p className="font-semibold text-ink">{error?.message}</p>
+              <button
+                type="button"
+                onClick={() => setApplied((a) => ({ ...a }))}
+                className="mt-3 rounded-xl bg-brand px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-brand/90"
+              >
+                Coba Lagi
+              </button>
+            </div>
+          ) : (
+            <HistoryTable
+              rows={data?.data ?? []}
+              meta={data?.meta ?? null}
+              loading={loading}
+              toolbar={
+                <FilterBar
+                  draft={draft}
+                  onChange={setDraft}
+                  onApply={apply}
+                  onReset={() => changeInstrument(applied.slug)}
+                  canApply={canApply}
+                  canReset={canReset}
+                  exportHref={exportUrl(applied)}
+                />
+              }
+              onPivot={(date) => onPivot(instrument?.slug ?? applied.slug, date)}
+              onPage={setPage}
+            />
+          )}
           </div>
-        ) : (
-          <HistoryTable
-            rows={data?.data ?? []}
-            meta={data?.meta ?? null}
-            loading={loading}
-            toolbar={
-              <FilterBar
-                draft={draft}
-                onChange={setDraft}
-                onApply={apply}
-                onReset={() => changeInstrument(applied.slug)}
-                canApply={canApply}
-                canReset={canReset}
-                exportHref={exportUrl(applied)}
-              />
-            }
-            onPivot={(date) => onPivot(instrument?.slug ?? applied.slug, date)}
-            onPage={setPage}
-          />
-        )}
+        </RevealGroup>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import type { Instrument } from "../types";
 import HistoryPanel from "./HistoryPanel";
 import PivotPanel, { type PivotPreset } from "./PivotPanel";
 import SlidingTabs from "@/components/ui/SlidingTabs";
+import RevealGroup from "@/components/ui/RevealGroup";
 
 type Tab = "history" | "pivot";
 
@@ -49,22 +50,24 @@ export default function AnalisaTabs() {
 
   return (
     <div id="panel" className="scroll-mt-28">
-      <div className="flex justify-center">
-        <SlidingTabs
-          variant="pill"
-          ariaLabel="Alat analisa"
-          value={tab}
-          onChange={go}
-          options={TABS.map(({ id, label, icon: Icon }) => ({
-            value: id,
-            label: (
-              <>
-                <Icon size={15} /> {label}
-              </>
-            ),
-          }))}
-        />
-      </div>
+      <RevealGroup threshold={0.05}>
+        <div className="reveal-zoom flex justify-center">
+            <SlidingTabs
+              variant="pill"
+              ariaLabel="Alat analisa"
+              value={tab}
+              onChange={go}
+              options={TABS.map(({ id, label, icon: Icon }) => ({
+                value: id,
+                label: (
+                  <>
+                    <Icon size={15} /> {label}
+                  </>
+                ),
+              }))}
+            />
+          </div>
+      </RevealGroup>
 
       <div className="mt-8">
         {/* Kedua panel tetap terpasang agar filter dan hasil tidak hilang saat berpindah tab */}

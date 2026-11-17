@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { formatDate, formatNumber, formatPercent } from "@/lib/format";
 import type { HistoryRow, PageMeta } from "../types";
 import HistoryPagination from "./HistoryPagination";
@@ -92,11 +92,15 @@ export default function HistoryTable({ rows, meta, loading, toolbar, onPivot, on
                 </td>
               </tr>
             ) : (
-              rows.map((r) => {
+              rows.map((r, i) => {
                 const up = (r.change_percent ?? 0) > 0;
                 const down = (r.change_percent ?? 0) < 0;
                 return (
-                  <tr key={r.date} className="border-t border-softgrey">
+                  <tr
+                    key={r.date}
+                    className="row-in border-t border-softgrey"
+                    style={{ "--row-delay": `${Math.min(i, 12) * 35}ms` } as CSSProperties}
+                  >
                     <td className={`${tdFirst} font-semibold text-ink`}>{formatDate(r.date)}</td>
                     <td className={`${td} text-muted`}>{formatNumber(r.open)}</td>
                     <td className={`${td} font-semibold text-ink`}>{formatNumber(r.high)}</td>
