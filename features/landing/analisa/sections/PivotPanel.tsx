@@ -230,7 +230,9 @@ export default function PivotPanel({ instruments, preset }: Props) {
   // Kartu OHLC: dari hari bursa acuan (mode historis) atau nilai input (mode manual, tanpa Open).
   const ohlc = data?.basis
     ? {
-        open: data.basis.open as number | null,
+        // Open = hari yang dianalisa (hari ini dari live-quotes, tanggal lampau dari riwayat).
+        // High, Low, Close = hari bursa sebelumnya.
+        open: data.today_open ?? null,
         high: data.basis.high,
         low: data.basis.low,
         close: data.basis.close,
@@ -460,6 +462,14 @@ export default function PivotPanel({ instruments, preset }: Props) {
                     </div>
                   ))}
                 </div>
+
+                {/* Keterangan tanggal: Open hari yang dianalisa, HLC hari bursa sebelumnya */}
+                {data.basis && (
+                  <p className="type-micro mt-2 text-muted">
+                    Open: {formatDate(data.target_date ?? data.basis.date)} · High, Low, Close:{" "}
+                    {formatDate(data.basis.date)}
+                  </p>
+                )}
 
                 {/* Tabel pivot point */}
                 <div className="mt-4 overflow-hidden rounded-2xl border border-softgrey">
