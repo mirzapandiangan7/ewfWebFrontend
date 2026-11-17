@@ -6,6 +6,7 @@ import { priceText } from "@/features/landing/analisa/constants";
 import type { LiveResponse } from "@/features/landing/analisa/types";
 import { marketClocks, marketTickers } from "@/features/landing/beranda/data";
 import { formatNumber, formatPercent } from "@/lib/format";
+import { delay } from "@/lib/reveal";
 
 const POLL_MS = 15_000; // backend menyimpan cache harga live selama 15 detik
 
@@ -93,7 +94,10 @@ export default function MarketBar() {
 
   return (
     <section className="relative z-10 mx-auto -mt-14 max-w-7xl px-4 sm:px-6">
-      <div className="grid gap-6 rounded-3xl bg-white p-5 shadow-xl lg:grid-cols-[auto_1fr] lg:items-center">
+      <div
+        className="hero-rise grid gap-6 rounded-3xl bg-white p-5 shadow-xl lg:grid-cols-[auto_1fr] lg:items-center"
+        style={delay(1100)}
+      >
         <div className="grid grid-cols-2 gap-x-8 gap-y-3">
           {marketClocks.map((c) => {
             const abbr = c.abbr ?? (now ? zoneAbbr(now, c.timeZone) : "");
@@ -120,7 +124,11 @@ export default function MarketBar() {
             return (
               <p key={slug} className="text-[13px] font-medium text-muted">
                 {label}{" "}
-                <span className="type-data text-ink">
+                <span
+                  key={quote?.price}
+                  data-dir={quote?.direction}
+                  className="price-tick type-data text-ink"
+                >
                   {quote ? priceText(slug, formatNumber(quote.price)) : "–"}
                 </span>{" "}
                 <span className={`text-[13px] font-semibold ${tone}`}>

@@ -1,32 +1,39 @@
 import { ShieldCheck, TrendingUp, GraduationCap } from "lucide-react";
+import CountUp from "@/components/ui/CountUp";
+import RevealGroup from "@/components/ui/RevealGroup";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { stats } from "@/features/landing/beranda/data";
+import { delay } from "@/lib/reveal";
 
 export default function WhyUs() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-25 sm:px-6">
-      <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <RevealGroup className="grid gap-10 lg:grid-cols-2 lg:items-center">
         <div>
-          <SectionHeading
-            eyebrow="Keunggulan Institusional"
-            title={
-              <>
-                Mengapa Nasabah Memilih{" "}
-                <span className="text-brand">Equityworld Futures</span>
-              </>
-            }
-          />
-          <p className="type-body mt-4 text-muted">
+          <div className="reveal-item">
+            <SectionHeading
+              eyebrow="Keunggulan Institusional"
+              title={
+                <>
+                  Mengapa Nasabah Memilih{" "}
+                  <span className="text-brand">Equityworld Futures</span>
+                </>
+              }
+            />
+          </div>
+          <p className="reveal-item type-body mt-4 text-muted" style={delay(120)}>
             Lebih dari dua dekade kami mendampingi pelaku pasar dan investor
             Indonesia dalam menavigasi volatilitas komoditas global. Berlandaskan
             integritas, transparansi regulasi BAPPEBTI, dan standar keamanan aset
             berkelas dunia.
           </p>
 
-          <div className="mt-8 grid grid-cols-3 gap-4">
+          <div className="reveal-item mt-8 grid grid-cols-3 gap-4" style={delay(240)}>
             {stats.map((s) => (
               <div key={s.label}>
-                <p className="type-h2 text-ink">{s.value}</p>
+                <p className="type-h2 text-ink">
+                  <CountUp value={s.value} />
+                </p>
                 <p className="type-micro mt-1 text-muted">{s.label}</p>
               </div>
             ))}
@@ -34,7 +41,10 @@ export default function WhyUs() {
         </div>
 
         <div className="space-y-4">
-          <div className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm">
+          <div
+            className="reveal-right flex gap-4 rounded-2xl bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md"
+            style={delay(200)}
+          >
             <ShieldCheck className="shrink-0 text-navy" />
             <div>
               <h3 className="type-h3 text-ink">Terdaftar & Diawasi Ketat</h3>
@@ -46,7 +56,10 @@ export default function WhyUs() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-brand p-5 text-white shadow-lg">
+          <div
+            className="reveal-right rounded-2xl bg-brand p-5 text-white shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+            style={delay(340)}
+          >
             <div className="flex gap-4">
               <TrendingUp className="shrink-0" />
               <div>
@@ -63,7 +76,10 @@ export default function WhyUs() {
             </div>
           </div>
 
-          <div className="flex gap-4 rounded-2xl bg-white p-5 shadow-sm">
+          <div
+            className="reveal-right flex gap-4 rounded-2xl bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md"
+            style={delay(480)}
+          >
             <GraduationCap className="shrink-0 text-navy" />
             <div>
               <h3 className="type-h3 text-ink">Edukasi Terarah untuk Pemula</h3>
@@ -75,7 +91,7 @@ export default function WhyUs() {
             </div>
           </div>
         </div>
-      </div>
+      </RevealGroup>
     </section>
   );
 }

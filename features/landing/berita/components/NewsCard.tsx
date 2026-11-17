@@ -13,7 +13,7 @@ export default function NewsCard({ item }: { item: NewsItem }) {
   return (
     <Wrapper
       {...link}
-      className="group flex h-full flex-col rounded-2xl bg-white p-3 shadow-sm transition hover:shadow-lg"
+      className="group flex h-full flex-col rounded-2xl bg-white p-3 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
     >
       <div className="relative h-44 overflow-hidden rounded-xl bg-navy">
         <NewsImage src={item.image} sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw" />

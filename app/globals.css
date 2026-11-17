@@ -108,36 +108,109 @@ html {
   animation: footer-line 6s linear infinite;
 }
 
-.reveal-item {
-  opacity: 0;
-  transform: translateY(1.5rem);
-  transition:
-    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
+/* ===== Animasi masuk (RevealGroup, hero, beranda) ===== */
+:root {
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.reveal-group[data-visible="true"] .reveal-item {
-  opacity: 1;
-  transform: none;
+/* Tersembunyi sampai grupnya terlihat */
+.reveal-item,
+.reveal-left,
+.reveal-right,
+.reveal-zoom,
+.reveal-fade,
+.reveal-pop {
+  opacity: 0;
 }
+
+/* "backwards": sebelum jeda selesai tampil di keyframe awal, sesudahnya kembali
+   ke gaya normal, jadi hover/transform milik elemen itu tidak terganggu. */
+.reveal-group[data-visible="true"]
+  :is(.reveal-item, .reveal-left, .reveal-right, .reveal-zoom, .reveal-fade, .reveal-pop) {
+  opacity: 1;
+  animation: reveal-up var(--reveal-duration, 800ms) var(--ease-out-expo)
+    var(--reveal-delay, 0ms) backwards;
+}
+.reveal-group[data-visible="true"] .reveal-left  { animation-name: reveal-left; }
+.reveal-group[data-visible="true"] .reveal-right { animation-name: reveal-right; }
+.reveal-group[data-visible="true"] .reveal-zoom  { animation-name: reveal-zoom; }
+.reveal-group[data-visible="true"] .reveal-fade  { animation-name: reveal-fade; }
+.reveal-group[data-visible="true"] .reveal-pop {
+  animation-name: reveal-pop;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); /* sedikit memantul */
+}
+
+/* Gambar di dalam kartu: mengendap dari agak besar ke ukuran normal */
+.reveal-group[data-visible="true"] .reveal-image {
+  animation: image-settle 1400ms var(--ease-out-expo) 100ms backwards;
+}
+
+@keyframes reveal-up    { from { opacity: 0; transform: translateY(1.5rem); } }
+@keyframes reveal-left  { from { opacity: 0; transform: translateX(-2rem); } }
+@keyframes reveal-right { from { opacity: 0; transform: translateX(2rem); } }
+@keyframes reveal-zoom  { from { opacity: 0; transform: scale(0.94); } }
+@keyframes reveal-fade  { from { opacity: 0; } }
+@keyframes reveal-pop   { from { opacity: 0; transform: translateY(0.75rem) scale(0.7); } }
+@keyframes image-settle { from { transform: scale(1.15); } }
+
+/* ===== Hero: animasi saat halaman dibuka (bukan saat scroll) ===== */
+.hero-rise {
+  animation: hero-rise 900ms var(--ease-out-expo) var(--reveal-delay, 0ms) backwards;
+}
+.hero-zoom {
+  animation: hero-zoom 2400ms var(--ease-out-expo) backwards;
+}
+@keyframes hero-rise { from { opacity: 0; transform: translateY(1.25rem); } }
+@keyframes hero-zoom { from { transform: scale(1.08); } }
+
+/* ===== Baris tabel pivot muncul beruntun saat ganti tab ===== */
+.row-in {
+  animation: row-in 450ms var(--ease-out-expo) var(--row-delay, 0ms) backwards;
+}
+@keyframes row-in { from { opacity: 0; transform: translateY(0.5rem); } }
+
+/* ===== Harga live berkedip saat berubah ===== */
+.price-tick {
+  margin: 0 -0.25rem;
+  padding: 0 0.25rem;
+  border-radius: 0.375rem;
+}
+.price-tick[data-dir="up"]   { animation: tick-up 1200ms ease-out; }
+.price-tick[data-dir="down"] { animation: tick-down 1200ms ease-out; }
+@keyframes tick-up   { from { background-color: rgb(22 163 74 / 0.25); }  to { background-color: transparent; } }
+@keyframes tick-down { from { background-color: rgb(220 38 38 / 0.22); }  to { background-color: transparent; } }
 
 @media (prefers-reduced-motion: reduce) {
   .footer-line {
     animation: none;
     background-position: 50% 0;
   }
-  .reveal-item {
-    opacity: 1;
-    transform: none;
-    transition: none;
+  .reveal-item,
+  .reveal-left,
+  .reveal-right,
+  .reveal-zoom,
+  .reveal-fade,
+  .reveal-pop {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  .reveal-image,
+  .hero-rise,
+  .hero-zoom,
+  .row-in,
+  .price-tick {
+    animation: none !important;
   }
 }
 
-/* Tanpa JavaScript, tampilkan isi footer apa adanya */
+/* Tanpa JavaScript, tampilkan isi apa adanya */
 @media (scripting: none) {
-  .reveal-item {
+  .reveal-item,
+  .reveal-left,
+  .reveal-right,
+  .reveal-zoom,
+  .reveal-fade,
+  .reveal-pop {
     opacity: 1;
-    transform: none;
   }
 }

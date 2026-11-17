@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { formatDate, formatNumber } from "@/lib/format";
 import type { PivotLevels } from "@/features/landing/analisa/types";
 import { PIVOT_SLUGS, type LatestPivots } from "../api";
@@ -58,11 +58,12 @@ export default function PivotTabs({ pivots }: { pivots: LatestPivots }) {
             {formatNumber(data.basis.close)}
           </p>
 
-          <div className="mt-4 space-y-2">
-            {ROWS.map(([key, name, type]) => (
+          <div key={slug} className="mt-4 space-y-2">
+            {ROWS.map(([key, name, type], i) => (
               <div
                 key={key}
-                className={`type-data flex items-center justify-between rounded-lg px-4 py-2.5 text-[14px] ${
+                style={{ "--row-delay": `${i * 45}ms` } as CSSProperties}
+                className={`row-in type-data flex items-center justify-between rounded-lg px-4 py-2.5 text-[14px] ${
                   type === "pp"
                     ? "bg-brand text-white"
                     : type === "r"

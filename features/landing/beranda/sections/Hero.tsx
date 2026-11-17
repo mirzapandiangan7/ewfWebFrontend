@@ -5,6 +5,7 @@ import { heroTags } from "@/features/landing/beranda/data";
 import GlassChip from "@/components/ui/GlassChip";
 import SpecularLink from "@/components/ui/SpecularLink";
 import { HERO_FRAME, HERO_INNER } from "@/features/landing/shared/hero";
+import { delay } from "@/lib/reveal";
 
 const HERO_TEXT_SIZE = "clamp(2.25rem, 4.1vw, 5rem)";
 
@@ -18,7 +19,7 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="hero-zoom object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-navy/95 via-navy/55 to-transparent" />
         <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-navy/70 to-transparent" />
@@ -43,7 +44,7 @@ export default function Hero() {
               />
             </h1>
 
-            <p className="type-body mt-5 max-w-lg text-white/80">
+            <p className="hero-rise type-body mt-5 max-w-lg text-white/80" style={delay(450)}>
               Akses perdagangan emas, minyak mentah, serta indeks Hang Seng dan
               Nikkei 225 dengan data pasar real-time, analisa harian, dan
               platform yang diawasi regulator.
@@ -51,15 +52,13 @@ export default function Hero() {
 
             <ul className="mt-6 flex flex-wrap gap-2">
               {heroTags.map((t, i) => (
-                <li key={t}>
-                  <GlassChip tone={i === heroTags.length - 1 ? "green" : "neutral"}>
-                    {t}
-                  </GlassChip>
+                <li key={t} className="hero-rise" style={delay(650 + i * 80)}>
+                  <GlassChip tone={i === heroTags.length - 1 ? "green" : "neutral"}>{t}</GlassChip>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="hero-rise mt-7 flex flex-wrap gap-3" style={delay(950)}>
               <SpecularLink href="/tentang-kami" variant="primary">
                 Kenali Kami <ArrowRight size={16} />
               </SpecularLink>
