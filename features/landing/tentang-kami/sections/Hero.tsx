@@ -4,6 +4,7 @@ import StrokeText from "@/components/ui/StrokeText";
 import GlassChip from "@/components/ui/GlassChip";
 import SpecularLink from "@/components/ui/SpecularLink";
 import { HERO_FRAME, HERO_INNER } from "@/features/landing/shared/hero";
+import { delay } from "@/lib/reveal";
 
 const HERO_TEXT_SIZE = "clamp(1.5rem, 4.2vw, 3.25rem)";
 
@@ -17,14 +18,15 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="hero-zoom object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-navy/90 via-navy/60 to-navy/20" />
         <div className="absolute inset-0 bg-linear-to-t from-navy/70 via-transparent to-navy/40" />
 
         <p
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 -bottom-[0.2em] select-none text-center font-display text-[clamp(4rem,17vw,12rem)] font-extrabold leading-none text-white/[0.07]"
+          className="hero-rise pointer-events-none absolute inset-x-0 -bottom-[0.2em] select-none text-center font-display text-[clamp(4rem,17vw,12rem)] font-extrabold leading-none text-white/[0.07]"
+          style={delay(300)}
         >
           EQUITYWORLD
         </p>
@@ -48,7 +50,7 @@ export default function Hero() {
             />
           </h1>
 
-          <p className="mt-6 max-w-xl text-[15px] leading-7 text-white/80">
+          <p className="hero-rise mt-6 max-w-xl text-[15px] leading-7 text-white/80" style={delay(450)}>
             Dedikasi lebih dari dua dekade menghadirkan ekosistem perdagangan
             berjangka yang transparan, teregulasi resmi BAPPEBTI, dan
             berorientasi pada keamanan investasi nasabah di seluruh Indonesia.
@@ -57,12 +59,12 @@ export default function Hero() {
           <div className="mt-5 flex flex-col gap-2">
             {/* Baris Atas: 2 Pill */}
             <ul className="flex flex-wrap gap-2">
-              <li>
+              <li className="hero-rise" style={delay(650)}>
                 <GlassChip>
                   <span className="h-1.5 w-1.5 rounded-full bg-bull" /> Pialang Berjangka Terdaftar BAPPEBTI
                 </GlassChip>
               </li>
-              <li>
+              <li className="hero-rise" style={delay(730)}>
                 <GlassChip>
                   <BadgeCheck size={13} className="text-sapphire" /> Izin No. 549/BAPPEBTI/SI/IX/2004
                 </GlassChip>
@@ -71,13 +73,13 @@ export default function Hero() {
 
             {/* Baris Bawah: 3 Pill */}
             <ul className="flex flex-wrap gap-2">
-              <li>
+              <li className="hero-rise" style={delay(810)}>
                 <GlassChip>20+ Tahun Pengalaman Pialang</GlassChip>
               </li>
-              <li>
+              <li className="hero-rise" style={delay(890)}>
                 <GlassChip>7 Kantor Operasional di 5 Kota</GlassChip>
               </li>
-              <li>
+              <li className="hero-rise" style={delay(970)}>
                 <GlassChip tone="green">
                   <Lock size={12} /> 100% Rekening Terpisah (Segregated)
                 </GlassChip>
@@ -85,8 +87,7 @@ export default function Hero() {
             </ul>
           </div>
 
-
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="hero-rise mt-7 flex flex-wrap gap-3" style={delay(1100)}>
             <SpecularLink href="#profil" variant="primary">
               Profil Perusahaan <ArrowRight size={16} />
             </SpecularLink>

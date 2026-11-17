@@ -145,6 +145,17 @@ html {
   animation: image-settle 1400ms var(--ease-out-expo) 100ms backwards;
 }
 
+/* Garis penghubung "tergambar" dari atas ke bawah (diagram struktur) */
+.reveal-draw {
+  transform-origin: top;
+  opacity: 0;
+}
+.reveal-group[data-visible="true"] .reveal-draw {
+  opacity: 1;
+  animation: reveal-draw 500ms var(--ease-out-expo) var(--reveal-delay, 0ms) backwards;
+}
+@keyframes reveal-draw { from { transform: scaleY(0); } }
+
 @keyframes reveal-up    { from { opacity: 0; transform: translateY(1.5rem); } }
 @keyframes reveal-left  { from { opacity: 0; transform: translateX(-2rem); } }
 @keyframes reveal-right { from { opacity: 0; transform: translateX(2rem); } }
@@ -190,7 +201,8 @@ html {
   .reveal-right,
   .reveal-zoom,
   .reveal-fade,
-  .reveal-pop {
+  .reveal-pop,
+  .reveal-draw {
     opacity: 1 !important;
     animation: none !important;
   }
@@ -210,7 +222,8 @@ html {
   .reveal-right,
   .reveal-zoom,
   .reveal-fade,
-  .reveal-pop {
+  .reveal-pop,
+  .reveal-draw {
     opacity: 1;
   }
 }

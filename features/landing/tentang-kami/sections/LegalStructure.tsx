@@ -5,6 +5,8 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import RevealGroup from "@/components/ui/RevealGroup";
+import { delay, stagger } from "@/lib/reveal";
 
 const logos = {
   kemendag: { src: "/images/kemendag.webp", alt: "Logo Kementerian Perdagangan" },
@@ -37,6 +39,9 @@ type NodeProps = {
   subtitle?: string;
   featured?: boolean;
   children?: React.ReactNode;
+  /** Kelas animasi masuk: reveal-item, reveal-zoom, reveal-left, reveal-right */
+  reveal?: string;
+  delayMs?: number;
 };
 
 function LegalNode({
@@ -49,10 +54,13 @@ function LegalNode({
   accent,
   featured,
   children,
+  reveal = "reveal-item",
+  delayMs = 0,
 }: NodeProps) {
   return (
     <div
-      className={`flex h-full flex-col items-center rounded-2xl border-t-4 bg-white p-5 text-center shadow-sm ${accent} ${
+      style={delay(delayMs)}
+      className={`${reveal} flex h-full flex-col items-center rounded-2xl border-t-4 bg-white p-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg ${accent} ${
         featured ? "shadow-xl ring-2 ring-ink" : ""
       }`}
     >
@@ -102,14 +110,15 @@ function Connector({
   const t = tones[tone];
   return (
     <div className="flex flex-col items-center">
-      <span className={`h-5 w-0.5 ${t.line}`} />
+      <span className={`reveal-draw h-5 w-0.5 ${t.line}`} />
       <span
-        className={`inline-flex items-center gap-1.5 rounded-full border border-softgrey bg-white px-3 py-1 text-[11px] font-medium shadow-sm ${t.text}`}
+        className={`reveal-pop inline-flex items-center gap-1.5 rounded-full border border-softgrey bg-white px-3 py-1 text-[11px] font-medium shadow-sm ${t.text}`}
+        style={delay(250)}
       >
         {label}
         {Icon && <Icon size={12} />}
       </span>
-      <span className={`h-5 w-0.5 ${t.line}`} />
+      <span className={`reveal-draw h-5 w-0.5 ${t.line}`} style={delay(450)} />
     </div>
   );
 }
@@ -118,175 +127,214 @@ export default function LegalStructure() {
   return (
     <section id="legalitas" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
       <div className="rounded-[2rem] border border-softgrey bg-softgrey/50 p-6 sm:p-10">
-        <div className="text-center">
-          <h2 className="type-h2 text-ink">Struktur Legalitas & Pengawasan</h2>
-          <p className="type-body mt-2 text-muted">
+        <RevealGroup className="text-center">
+          <h2 className="reveal-item type-h2 text-ink">Struktur Legalitas & Pengawasan</h2>
+          <p className="reveal-item type-body mt-2 text-muted" style={delay(120)}>
             Posisi EWF dalam ekosistem perdagangan berjangka Indonesia
           </p>
-        </div>
+        </RevealGroup>
 
+        {/* Tiap tingkat punya RevealGroup sendiri agar terbuka saat di-scroll */}
         <div className="mx-auto mt-10 max-w-5xl">
           {/* Level 1: Kemendag */}
-          <div className="mx-auto max-w-md">
-            <LegalNode
-              logo={logos.kemendag}
-              title="Kementerian Perdagangan (Kemendag)"
-              desc="Menetapkan kebijakan nasional, termasuk perdagangan berjangka komoditi."
-              tag="Kebijakan Nasional"
-              accent="border-t-navy"
-            />
-          </div>
-
-          <Connector label="Membawahi" icon={ArrowDown} />
+          <RevealGroup>
+            <div className="mx-auto max-w-md">
+              <LegalNode
+                logo={logos.kemendag}
+                title="Kementerian Perdagangan (Kemendag)"
+                desc="Menetapkan kebijakan nasional, termasuk perdagangan berjangka komoditi."
+                tag="Kebijakan Nasional"
+                accent="border-t-navy"
+                reveal="reveal-zoom"
+              />
+            </div>
+          </RevealGroup>
 
           {/* Level 2: OJK - BAPPEBTI - BI */}
-          <div className="relative md:pt-6">
-            <div className="pointer-events-none absolute inset-x-[16.6%] top-2 hidden h-4 rounded-t-2xl border-x-2 border-t-2 border-dashed border-muted/60 md:block" />
-            <span className="absolute left-1/2 top-0 hidden -translate-x-1/2 rounded-full border border-softgrey bg-white px-3 py-0.5 text-[11px] font-medium text-muted shadow-sm md:inline-flex">
-              Garis Koordinasi OJK & BI
-            </span>
+          <RevealGroup>
+            <Connector label="Membawahi" icon={ArrowDown} />
 
-            <div className="grid gap-4 md:grid-cols-3">
-              <LegalNode
-                logo={logos.ojk}
-                title="Otoritas Jasa Keuangan (OJK)"
-                desc="Mengawasi sektor jasa keuangan agar tertib, transparan, dan melindungi konsumen."
-                tag="Koordinasi Sektoral"
-                accent="border-t-navy"
+            <div className="relative md:pt-6">
+              <div
+                className="reveal-fade pointer-events-none absolute inset-x-[16.6%] top-2 hidden h-4 rounded-t-2xl border-x-2 border-t-2 border-dashed border-muted/60 md:block"
+                style={delay(500)}
               />
-              <LegalNode
-                featured
-                logo={logos.bappebti}
-                eyebrow="Regulator Utama"
-                title="BAPPEBTI"
-                subtitle="(Badan Pengawas Perdagangan Berjangka Komoditi)"
-                desc="Membina, mengatur, dan mengawasi seluruh kegiatan perdagangan berjangka komoditi di Indonesia."
-                tag="Perizinan & Pengawasan"
-                accent="border-t-navy"
-              />
-              <LegalNode
-                logo={logos.bi}
-                title="Bank Indonesia (BI)"
-                desc="Menjaga stabilitas moneter dan sistem pembayaran serta lalu lintas dana nasabah di perbankan."
-                tag="Koordinasi Moneter"
-                accent="border-t-navy"
-              />
+              <span
+                className="reveal-fade absolute left-1/2 top-0 hidden -translate-x-1/2 rounded-full border border-softgrey bg-white px-3 py-0.5 text-[11px] font-medium text-muted shadow-sm md:inline-flex"
+                style={delay(600)}
+              >
+                Garis Koordinasi OJK & BI
+              </span>
+
+              <div className="grid gap-4 md:grid-cols-3">
+                <LegalNode
+                  logo={logos.ojk}
+                  title="Otoritas Jasa Keuangan (OJK)"
+                  desc="Mengawasi sektor jasa keuangan agar tertib, transparan, dan melindungi konsumen."
+                  tag="Koordinasi Sektoral"
+                  accent="border-t-navy"
+                  reveal="reveal-left"
+                  delayMs={400}
+                />
+                <LegalNode
+                  featured
+                  logo={logos.bappebti}
+                  eyebrow="Regulator Utama"
+                  title="BAPPEBTI"
+                  subtitle="(Badan Pengawas Perdagangan Berjangka Komoditi)"
+                  desc="Membina, mengatur, dan mengawasi seluruh kegiatan perdagangan berjangka komoditi di Indonesia."
+                  tag="Perizinan & Pengawasan"
+                  accent="border-t-navy"
+                  reveal="reveal-zoom"
+                  delayMs={550}
+                />
+                <LegalNode
+                  logo={logos.bi}
+                  title="Bank Indonesia (BI)"
+                  desc="Menjaga stabilitas moneter dan sistem pembayaran serta lalu lintas dana nasabah di perbankan."
+                  tag="Koordinasi Moneter"
+                  accent="border-t-navy"
+                  reveal="reveal-right"
+                  delayMs={700}
+                />
+              </div>
             </div>
-          </div>
-
-          <Connector label="Bappebti Membawahi & Mengawasi" tone="blue" />
-          <div className="mx-auto hidden h-5 w-1/2 rounded-t-2xl border-x-2 border-t-2 border-sapphire md:block" />
+          </RevealGroup>
 
           {/* Level 3: BBJ - KBI */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <LegalNode
-              logo={logos.bbj}
-              eyebrow="Penyelenggara Bursa"
-              title="PT Bursa Berjangka Jakarta (BBJ)"
-              desc="Penyelenggara bursa resmi tempat perdagangan kontrak berjangka dan derivatif dilaksanakan secara teratur, wajar, dan transparan."
-              tag="Sarana Perdagangan Berjangka"
-              accent="border-t-sapphire"
+          <RevealGroup>
+            <Connector label="Bappebti Membawahi & Mengawasi" tone="blue" />
+            <div
+              className="reveal-fade mx-auto hidden h-5 w-1/2 rounded-t-2xl border-x-2 border-t-2 border-sapphire md:block"
+              style={delay(500)}
             />
-            <LegalNode
-              logo={logos.kbi}
-              eyebrow="Lembaga Penjaminan & Kliring"
-              title="PT Kliring Berjangka Indonesia (KBI)"
-              desc="Lembaga kliring yang menjamin dan menyelesaikan transaksi berjangka (settlement) serta manajemen risiko transaksi."
-              tag="Penjamin Transaksi & Kliring"
-              accent="border-t-sapphire"
-            >
-              <div className="mt-3 w-full rounded-xl border border-softgrey bg-surface p-3 text-left">
-                <p className="flex items-center gap-1.5 text-xs font-semibold text-ink">
-                  <span className="h-1.5 w-1.5 rounded-full bg-sapphire" />
-                  Sistem SiTNa
-                </p>
-                <p className="type-micro mt-1 text-muted">
-                  Sistem pendukung pencatatan dan pemantauan transaksi nasabah
-                  secara real-time dan transparan.
-                </p>
-              </div>
-            </LegalNode>
-          </div>
 
-          <div className="mx-auto hidden h-5 w-1/2 rounded-b-2xl border-x-2 border-b-2 border-brand md:block" />
-          <Connector label="Anggota Bursa & Anggota Kliring Resmi" tone="brand" icon={BadgeCheck} />
+            <div className="grid gap-4 md:grid-cols-2">
+              <LegalNode
+                logo={logos.bbj}
+                eyebrow="Penyelenggara Bursa"
+                title="PT Bursa Berjangka Jakarta (BBJ)"
+                desc="Penyelenggara bursa resmi tempat perdagangan kontrak berjangka dan derivatif dilaksanakan secara teratur, wajar, dan transparan."
+                tag="Sarana Perdagangan Berjangka"
+                accent="border-t-sapphire"
+                reveal="reveal-left"
+                delayMs={550}
+              />
+              <LegalNode
+                logo={logos.kbi}
+                eyebrow="Lembaga Penjaminan & Kliring"
+                title="PT Kliring Berjangka Indonesia (KBI)"
+                desc="Lembaga kliring yang menjamin dan menyelesaikan transaksi berjangka (settlement) serta manajemen risiko transaksi."
+                tag="Penjamin Transaksi & Kliring"
+                accent="border-t-sapphire"
+                reveal="reveal-right"
+                delayMs={650}
+              >
+                <div className="mt-3 w-full rounded-xl border border-softgrey bg-surface p-3 text-left">
+                  <p className="flex items-center gap-1.5 text-xs font-semibold text-ink">
+                    <span className="h-1.5 w-1.5 rounded-full bg-sapphire" />
+                    Sistem SiTNa
+                  </p>
+                  <p className="type-micro mt-1 text-muted">
+                    Sistem pendukung pencatatan dan pemantauan transaksi nasabah
+                    secara real-time dan transparan.
+                  </p>
+                </div>
+              </LegalNode>
+            </div>
+          </RevealGroup>
 
           {/* Level 4: EWF */}
-          <div className="mx-auto max-w-2xl rounded-2xl border-t-4 border-t-brand bg-white p-6 text-center shadow-xl ring-1 ring-brand/30">
-            <div className="flex flex-col items-center">
-              <LogoBox {...logos.ewf} />
-              <h3 className="mt-1 font-display text-lg font-extrabold uppercase text-ink">
-                PT Equityworld Futures
-              </h3>
-            </div>
-            <p className="type-micro mt-1 text-muted">
-              Izin Pialang BAPPEBTI No. 549/BAPPEBTI/SI/IX/2004
-            </p>
-            <p className="mt-3 text-sm leading-6 text-ink/80">
-              Pialang berjangka resmi yang menjadi perantara transaksi nasabah
-              dengan edukasi komprehensif, standar kepatuhan ketat, dan
-              transparansi laporan.
-            </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              {[
-                "Rekening Terpisah (Segregated Account)",
-                "Pelaporan Real-Time SiTNa",
-                "Wakil Pialang Berlisensi",
-              ].map((c) => (
-                <span
-                  key={c}
-                  className="rounded-full bg-softgrey px-3 py-1 text-[11px] font-medium text-muted"
-                >
-                  {c}
-                </span>
-              ))}
-            </div>
-          </div>
+          <RevealGroup>
+            <div className="reveal-fade mx-auto hidden h-5 w-1/2 rounded-b-2xl border-x-2 border-b-2 border-brand md:block" />
+            <Connector label="Anggota Bursa & Anggota Kliring Resmi" tone="brand" icon={BadgeCheck} />
 
-          <Connector label="Layanan Transaksi & Edukasi / Terlindungi" tone="green" icon={ArrowDown} />
+            <div
+              className="reveal-zoom mx-auto max-w-2xl rounded-2xl border-t-4 border-t-brand bg-white p-6 text-center shadow-xl ring-1 ring-brand/30"
+              style={delay(400)}
+            >
+              <div className="flex flex-col items-center">
+                <LogoBox {...logos.ewf} />
+                <h3 className="mt-1 font-display text-lg font-extrabold uppercase text-ink">
+                  PT Equityworld Futures
+                </h3>
+              </div>
+              <p className="type-micro mt-1 text-muted">
+                Izin Pialang BAPPEBTI No. 549/BAPPEBTI/SI/IX/2004
+              </p>
+              <p className="mt-3 text-sm leading-6 text-ink/80">
+                Pialang berjangka resmi yang menjadi perantara transaksi nasabah
+                dengan edukasi komprehensif, standar kepatuhan ketat, dan
+                transparansi laporan.
+              </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {[
+                  "Rekening Terpisah (Segregated Account)",
+                  "Pelaporan Real-Time SiTNa",
+                  "Wakil Pialang Berlisensi",
+                ].map((c, i) => (
+                  <span
+                    key={c}
+                    style={stagger(i, 100, 800)}
+                    className="reveal-pop rounded-full bg-softgrey px-3 py-1 text-[11px] font-medium text-muted"
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </RevealGroup>
 
           {/* Level 5: Nasabah */}
-          <div className="mx-auto max-w-xl rounded-2xl border-t-4 border-t-bull bg-white p-6 text-center shadow-sm">
-            <span className="mx-auto grid h-9 w-9 place-items-center rounded-xl bg-bull/10 text-bull">
-              <Users size={18} />
-            </span>
-            <h3 className="mt-3 font-display text-[15px] font-extrabold uppercase text-ink">
-              Masyarakat / Nasabah
-            </h3>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              Pelaku transaksi yang dilindungi melalui regulasi, pengawasan
-              berjenjang Bappebti, penjaminan penyelesaian transaksi KBI, serta
-              edukasi berkelanjutan dari EWF.
-            </p>
-          </div>
+          <RevealGroup>
+            <Connector label="Layanan Transaksi & Edukasi / Terlindungi" tone="green" icon={ArrowDown} />
 
+            <div
+              className="reveal-item mx-auto max-w-xl rounded-2xl border-t-4 border-t-bull bg-white p-6 text-center shadow-sm"
+              style={delay(400)}
+            >
+              <span className="mx-auto grid h-9 w-9 place-items-center rounded-xl bg-bull/10 text-bull">
+                <Users size={18} />
+              </span>
+              <h3 className="mt-3 font-display text-[15px] font-extrabold uppercase text-ink">
+                Masyarakat / Nasabah
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Pelaku transaksi yang dilindungi melalui regulasi, pengawasan
+                berjenjang Bappebti, penjaminan penyelesaian transaksi KBI, serta
+                edukasi berkelanjutan dari EWF.
+              </p>
+            </div>
+          </RevealGroup>
 
           {/* Legenda */}
-          <div className="mt-8 grid gap-4 rounded-2xl border border-softgrey bg-white p-4 text-[11px] text-muted md:grid-cols-[1.4fr_1fr] md:items-center">
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <span className="font-semibold text-ink">Keterangan:</span>
-              <span className="inline-flex items-center gap-2">
-                <span className="h-0.5 w-6 bg-ink" />
-                Hierarki Pengawasan (Kemendag - Bappebti)
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="w-6 border-t-2 border-dashed border-muted" />
-                Koordinasi Regulasi (OJK - BAPPEBTI - BI)
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="h-0.5 w-6 bg-sapphire" />
-                Bursa & Kliring (BBJ - KBI)
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-brand" />
-                Pialang Resmi EWF
-              </span>
+          <RevealGroup>
+            <div className="reveal-fade mt-8 grid gap-4 rounded-2xl border border-softgrey bg-white p-4 text-[11px] text-muted md:grid-cols-[1.4fr_1fr] md:items-center">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                <span className="font-semibold text-ink">Keterangan:</span>
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-0.5 w-6 bg-ink" />
+                  Hierarki Pengawasan (Kemendag - Bappebti)
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-6 border-t-2 border-dashed border-muted" />
+                  Koordinasi Regulasi (OJK - BAPPEBTI - BI)
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-0.5 w-6 bg-sapphire" />
+                  Bursa & Kliring (BBJ - KBI)
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-brand" />
+                  Pialang Resmi EWF
+                </span>
+              </div>
+              <p className="italic md:text-right">
+                *Mencerminkan struktur tata kelola resmi BAPPEBTI & Kementerian
+                Perdagangan Republik Indonesia.
+              </p>
             </div>
-            <p className="italic md:text-right">
-              *Mencerminkan struktur tata kelola resmi BAPPEBTI & Kementerian
-              Perdagangan Republik Indonesia.
-            </p>
-          </div>
+          </RevealGroup>
         </div>
       </div>
     </section>

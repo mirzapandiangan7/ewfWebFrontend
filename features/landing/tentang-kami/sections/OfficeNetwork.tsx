@@ -6,6 +6,8 @@ import {
   Phone,
   Printer,
 } from "lucide-react";
+import RevealGroup from "@/components/ui/RevealGroup";
+import { stagger } from "@/lib/reveal";
 import { offices } from "../data";
 
 const tel = (v: string) => `tel:${v.replace(/[^\d+]/g, "")}`;
@@ -13,22 +15,28 @@ const tel = (v: string) => `tel:${v.replace(/[^\d+]/g, "")}`;
 export default function OfficeNetwork() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
-      <h2 className="type-h2 text-ink">Jaringan Kantor Operasional</h2>
-      <p className="type-body mt-2 text-muted">
-        Satu kantor pusat dan lima kantor cabang di Jakarta, Surabaya,
-        Semarang, dan Cirebon.
-      </p>
+      <RevealGroup threshold={0.1}>
+        <div className="reveal-item">
+          <h2 className="type-h2 text-ink">Jaringan Kantor Operasional</h2>
+          <p className="type-body mt-2 text-muted">
+            Satu kantor pusat dan lima kantor cabang di Jakarta, Surabaya,
+            Semarang, dan Cirebon.
+          </p>
+        </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {offices.map((o) => {
-          const hq = o.type === "Kantor Pusat";
-          return (
-            <article
-              key={o.id}
-              className={`flex flex-col rounded-2xl p-6 ${
-                hq ? "bg-navy text-white" : "bg-white text-ink shadow-sm"
-              }`}
-            >
+        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {offices.map((o, i) => {
+            const hq = o.type === "Kantor Pusat";
+            return (
+              <article
+                key={o.id}
+                style={stagger(i, 90, 100)}
+                className={`flex flex-col rounded-2xl p-6 transition duration-300 hover:-translate-y-1 ${
+                  hq
+                    ? "reveal-zoom bg-navy text-white hover:shadow-xl"
+                    : "reveal-item bg-white text-ink shadow-sm hover:shadow-lg"
+                }`}
+              >
               <div className="flex items-center justify-between gap-3">
                 <span
                   className={`grid h-10 w-10 place-items-center rounded-xl ${
@@ -101,10 +109,11 @@ export default function OfficeNetwork() {
               >
                 <MapPin size={13} /> Lihat di Peta <ArrowUpRight size={12} />
               </a>
-            </article>
-          );
-        })}
-      </div>
+              </article>
+            );
+          })}
+        </div>
+      </RevealGroup>
     </section>
   );
 }
