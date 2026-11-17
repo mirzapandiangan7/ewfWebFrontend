@@ -5,6 +5,7 @@ import GlassChip from "@/components/ui/GlassChip";
 import SpecularLink from "@/components/ui/SpecularLink";
 import { heroBadges } from "@/features/landing/produk/data";
 import { HERO_FRAME, HERO_INNER } from "@/features/landing/shared/hero";
+import { delay } from "@/lib/reveal";
 
 const HERO_TEXT_SIZE = "clamp(2.25rem, 5vw, 5.5rem)";
 
@@ -18,15 +19,15 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="hero-zoom object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-navy/95 via-navy/60 to-navy/20" />
         <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-navy/70 to-transparent" />
 
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-6 right-4 select-none font-display font-extrabold leading-none text-white/10 sm:right-10"
-          style={{ fontSize: "clamp(5rem, 16vw, 14rem)" }}
+          className="hero-rise pointer-events-none absolute -bottom-6 right-4 select-none font-display font-extrabold leading-none text-white/10 sm:right-10"
+          style={{ fontSize: "clamp(5rem, 16vw, 14rem)", ...delay(300) }}
         >
           PRODUK
         </span>
@@ -55,12 +56,12 @@ export default function Hero() {
             />
           </h1>
 
-          <p className="type-body mt-4 max-w-xl text-white/80">
+          <p className="hero-rise type-body mt-4 max-w-xl text-white/80" style={delay(450)}>
             Empat produk pilihan dengan data real-time dan analisa harian,
             terdaftar dan diawasi resmi oleh BAPPEBTI.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="hero-rise mt-7 flex flex-wrap gap-3" style={delay(600)}>
             <SpecularLink href="#produk" variant="primary">
               Bandingkan Produk <ArrowRight size={16} />
             </SpecularLink>
@@ -69,14 +70,14 @@ export default function Hero() {
             </SpecularLink>
           </div>
 
-          <p className="type-micro mt-5 max-w-md text-white/50">
+          <p className="hero-rise type-micro mt-5 max-w-md text-white/50" style={delay(750)}>
             Perdagangan berjangka mengandung risiko tinggi dan tidak cocok
             untuk semua investor.
           </p>
 
           <ul className="mt-10 flex flex-wrap gap-3">
             {heroBadges.map((b, i) => (
-              <li key={b}>
+              <li key={b} className="hero-rise" style={delay(900 + i * 100)}>
                 <GlassChip tone={i === 0 ? "green" : "neutral"}>
                   {i === 0 && <ShieldCheck size={13} className="text-bull" />}
                   {b}

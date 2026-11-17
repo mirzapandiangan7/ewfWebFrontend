@@ -73,6 +73,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Cegah scrollbar horizontal sesaat saat elemen bergeser masuk dari samping.
+   Pakai "clip" (bukan "hidden") agar position: sticky tetap bekerja. */
+main {
+  overflow-x: clip;
+}
+
 /* 1rem = 16px untuk lebar ≥ ~1520px (patokan desain), lalu mengecil
    proporsional di layar yang lebih sempit, minimum 13px. */
 @media (min-width: 1024px) {
@@ -180,6 +186,12 @@ html {
 }
 @keyframes row-in { from { opacity: 0; transform: translateY(0.5rem); } }
 
+/* Jawaban FAQ meluncur lembut saat dibuka */
+.faq-answer {
+  animation: faq-open 350ms var(--ease-out-expo);
+}
+@keyframes faq-open { from { opacity: 0; transform: translateY(-0.5rem); } }
+
 /* ===== Harga live berkedip saat berubah ===== */
 .price-tick {
   margin: 0 -0.25rem;
@@ -210,7 +222,8 @@ html {
   .hero-rise,
   .hero-zoom,
   .row-in,
-  .price-tick {
+  .price-tick,
+  .faq-answer {
     animation: none !important;
   }
 }
