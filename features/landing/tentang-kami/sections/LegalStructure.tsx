@@ -126,7 +126,7 @@ function Connector({
 export default function LegalStructure() {
   return (
     <section id="legalitas" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
-      <div className="rounded-[2rem] border border-softgrey bg-softgrey/50 p-6 sm:p-10">
+      <div className="rounded-[2rem] border border-softgrey bg-softgrey/50 p-4 sm:p-10">
         <RevealGroup className="text-center">
           <h2 className="reveal-item type-h2 text-ink">Struktur Legalitas & Pengawasan</h2>
           <p className="reveal-item type-body mt-2 text-muted" style={delay(120)}>
@@ -310,22 +310,22 @@ export default function LegalStructure() {
           {/* Legenda */}
           <RevealGroup>
             <div className="reveal-fade mt-8 grid gap-4 rounded-2xl border border-softgrey bg-white p-4 text-[11px] text-muted md:grid-cols-[1.4fr_1fr] md:items-center">
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5">
                 <span className="font-semibold text-ink">Keterangan:</span>
                 <span className="inline-flex items-center gap-2">
-                  <span className="h-0.5 w-6 bg-ink" />
+                  <span className="h-0.5 w-6 shrink-0 bg-ink" />
                   Hierarki Pengawasan (Kemendag - Bappebti)
                 </span>
                 <span className="inline-flex items-center gap-2">
-                  <span className="w-6 border-t-2 border-dashed border-muted" />
+                  <span className="w-6 shrink-0 border-t-2 border-dashed border-muted" />
                   Koordinasi Regulasi (OJK - BAPPEBTI - BI)
                 </span>
                 <span className="inline-flex items-center gap-2">
-                  <span className="h-0.5 w-6 bg-sapphire" />
+                  <span className="h-0.5 w-6 shrink-0 bg-sapphire" />
                   Bursa & Kliring (BBJ - KBI)
                 </span>
                 <span className="inline-flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full bg-brand" />
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-brand" />
                   Pialang Resmi EWF
                 </span>
               </div>

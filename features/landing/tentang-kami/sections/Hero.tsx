@@ -20,12 +20,12 @@ export default function Hero() {
           sizes="100vw"
           className="hero-zoom object-cover"
         />
-        <div className="absolute inset-0 bg-linear-to-r from-navy/90 via-navy/60 to-navy/20" />
+        <div className="absolute inset-0 bg-navy/70 lg:bg-transparent lg:bg-linear-to-r lg:from-navy/90 lg:via-navy/60 lg:to-navy/20" />
         <div className="absolute inset-0 bg-linear-to-t from-navy/70 via-transparent to-navy/40" />
 
         <p
           aria-hidden="true"
-          className="hero-rise pointer-events-none absolute inset-x-0 -bottom-[0.2em] select-none text-center font-display text-[clamp(4rem,17vw,12rem)] font-extrabold leading-none text-white/[0.07]"
+          className="hero-rise pointer-events-none absolute inset-x-0 -bottom-[0.2em] select-none text-center font-display text-[clamp(2.5rem,11vw,4rem)] font-extrabold leading-none text-white/[0.07] md:text-[clamp(4rem,17vw,12rem)]"
           style={delay(300)}
         >
           EQUITYWORLD
@@ -77,7 +77,7 @@ export default function Hero() {
                 <GlassChip>20+ Tahun Pengalaman Pialang</GlassChip>
               </li>
               <li className="hero-rise" style={delay(890)}>
-                <GlassChip>7 Kantor Operasional di 5 Kota</GlassChip>
+                <GlassChip>6 Kantor Operasional di 4 Kota</GlassChip>
               </li>
               <li className="hero-rise" style={delay(970)}>
                 <GlassChip tone="green">
@@ -88,10 +88,10 @@ export default function Hero() {
           </div>
 
           <div className="hero-rise mt-7 flex flex-wrap gap-3" style={delay(1100)}>
-            <SpecularLink href="#profil" variant="primary">
+            <SpecularLink href="#profil" variant="primary" className="grow sm:grow-0">
               Profil Perusahaan <ArrowRight size={16} />
             </SpecularLink>
-            <SpecularLink href="#legalitas" variant="ghost">
+            <SpecularLink href="#legalitas" variant="ghost" className="grow sm:grow-0">
               <Network size={16} /> Struktur Legalitas
             </SpecularLink>
           </div>

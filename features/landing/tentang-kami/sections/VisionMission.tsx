@@ -6,7 +6,7 @@ export default function VisionMission() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
       <RevealGroup className="grid gap-6 lg:grid-cols-[2fr_3fr]">
-        <div className="reveal-left flex flex-col rounded-3xl bg-navy p-8 text-white shadow-lg">
+        <div className="reveal-left flex flex-col rounded-3xl bg-navy p-6 text-white shadow-lg sm:p-8">
           <div className="reveal-item" style={delay(250)}>
             <h2 className="type-h2">Visi Kami</h2>
           </div>
@@ -20,15 +20,15 @@ export default function VisionMission() {
             perekonomian nasional.”
           </blockquote>
           <div
-            className="reveal-item mt-auto flex items-center justify-between border-t border-white/10 pt-5 text-xs text-white/60"
+            className="reveal-item mt-auto flex items-center justify-between gap-4 border-t border-white/10 pt-5 text-xs text-white/60"
             style={delay(520)}
           >
             <span>Integritas • Profesionalisme • Tata Kelola</span>
-            <span className="h-1 w-8 rounded-full bg-brand" />
+            <span className="h-1 w-8 shrink-0 rounded-full bg-brand" />
           </div>
         </div>
 
-        <div className="reveal-right rounded-3xl bg-white p-8 shadow-sm" style={delay(150)}>
+        <div className="reveal-right rounded-3xl bg-white p-6 shadow-sm sm:p-8" style={delay(150)}>
           <h2 className="reveal-item type-h2 text-ink" style={delay(300)}>
             Misi Perusahaan
           </h2>

@@ -24,14 +24,18 @@ export default function OfficeNetwork() {
           </p>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <p className="type-micro mt-3 text-muted sm:hidden">
+          Geser ke samping untuk melihat kantor lainnya →
+        </p>
+
+        <div className="-mx-4 mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 pt-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:mt-8 sm:grid sm:snap-none sm:overflow-visible sm:px-0 sm:pb-0 sm:pt-0 md:grid-cols-2 lg:grid-cols-3">
           {offices.map((o, i) => {
             const hq = o.type === "Kantor Pusat";
             return (
               <article
                 key={o.id}
                 style={stagger(i, 90, 100)}
-                className={`flex flex-col rounded-2xl p-6 transition duration-300 hover:-translate-y-1 ${
+                className={`flex w-[85%] shrink-0 snap-start flex-col rounded-2xl p-6 transition duration-300 hover:-translate-y-1 sm:w-auto ${
                   hq
                     ? "reveal-zoom bg-navy text-white hover:shadow-xl"
                     : "reveal-item bg-white text-ink shadow-sm hover:shadow-lg"
@@ -78,7 +82,7 @@ export default function OfficeNetwork() {
               >
                 <li className="flex items-start gap-2">
                   <Phone size={14} className="mt-0.5 shrink-0 text-brand" />
-                  <a href={tel(o.phone)} className="hover:underline">
+                  <a href={tel(o.phone)} className="inline-block py-1 hover:underline">
                     {o.phone}
                   </a>
                 </li>
@@ -91,7 +95,7 @@ export default function OfficeNetwork() {
                     <Mail size={14} className="mt-0.5 shrink-0 text-brand" />
                     <a
                       href={`mailto:${o.email}`}
-                      className="break-all hover:underline"
+                      className="inline-block break-all py-1 hover:underline"
                     >
                       {o.email}
                     </a>
