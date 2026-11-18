@@ -24,7 +24,7 @@ export default function Products() {
           />
         </div>
 
-        <div className="reveal-zoom relative h-[37.5rem] overflow-hidden" style={delay(150)}>
+        <div className="reveal-zoom relative h-[26rem] overflow-hidden sm:h-[32rem] lg:h-[37.5rem]" style={delay(150)}>
           <CircularGallery
             items={items}
             bend={3}

@@ -29,8 +29,8 @@ export default function PivotTabs({ pivots }: { pivots: LatestPivots }) {
   const data = pivots[slug];
 
   return (
-    <div className="rounded-2xl bg-white/5 p-5">
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label="Pilih produk">
+    <div className="rounded-2xl bg-white/5 p-4 sm:p-5">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" role="tablist" aria-label="Pilih produk">
         {PIVOT_SLUGS.map((s) => (
           <button
             key={s}
@@ -38,7 +38,7 @@ export default function PivotTabs({ pivots }: { pivots: LatestPivots }) {
             role="tab"
             aria-selected={slug === s}
             onClick={() => setSlug(s)}
-            className={`rounded-full px-4 py-1.5 text-[12px] font-semibold transition ${
+            className={`rounded-full px-4 py-2 text-center text-[12px] font-semibold transition sm:py-1.5 ${
               slug === s ? "bg-brand text-white" : "bg-white/10 text-white/70 hover:bg-white/20"
             }`}
           >
@@ -63,7 +63,7 @@ export default function PivotTabs({ pivots }: { pivots: LatestPivots }) {
               <div
                 key={key}
                 style={{ "--row-delay": `${i * 45}ms` } as CSSProperties}
-                className={`row-in type-data flex items-center justify-between rounded-lg px-4 py-2.5 text-[14px] ${
+                className={`row-in type-data flex items-center justify-between rounded-lg px-3 py-2.5 text-[13px] sm:px-4 sm:text-[14px] ${
                   type === "pp"
                     ? "bg-brand text-white"
                     : type === "r"

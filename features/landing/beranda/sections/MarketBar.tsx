@@ -114,7 +114,7 @@ export default function MarketBar() {
           })}
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-softgrey pt-4 lg:justify-end lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+        <div className="grid grid-cols-2 gap-3 border-t border-softgrey pt-4 sm:flex sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3 lg:justify-end lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
           {marketTickers.map(({ slug, label }) => {
             const quote = live?.data[slug];
             const pct = quote?.change_percent;
@@ -122,12 +122,15 @@ export default function MarketBar() {
               pct == null || pct === 0 ? "text-muted" : pct > 0 ? "text-bull" : "text-bear";
 
             return (
-              <p key={slug} className="text-[13px] font-medium text-muted">
-                {label}{" "}
+              <p
+                key={slug}
+                className="rounded-xl bg-softgrey/60 px-3 py-2 text-[13px] font-medium text-muted sm:bg-transparent sm:p-0"
+              >
+                <span className="block sm:inline">{label}</span>{" "}
                 <span
                   key={quote?.price}
                   data-dir={quote?.direction}
-                  className="price-tick type-data text-ink"
+                  className="price-tick type-data block text-ink sm:inline"
                 >
                   {quote ? priceText(slug, formatNumber(quote.price)) : "–"}
                 </span>{" "}
@@ -137,7 +140,7 @@ export default function MarketBar() {
               </p>
             );
           })}
-          <span className="type-micro text-muted">{statusText}</span>
+          <span className="type-micro col-span-2 text-muted sm:col-span-1">{statusText}</span>
         </div>
       </div>
     </section>

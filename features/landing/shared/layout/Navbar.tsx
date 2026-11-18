@@ -85,9 +85,10 @@ export default function Navbar() {
         </div>
 
         <button
-          className="text-white xl:hidden"
+          className="-mr-2 grid h-11 w-11 place-items-center text-white xl:hidden"
           onClick={() => setOpen(!open)}
-          aria-label="Buka menu"
+          aria-label={open ? "Tutup menu" : "Buka menu"}
+          aria-expanded={open}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -95,7 +96,7 @@ export default function Navbar() {
 
       {/* Mobile: menu biasa */}
       {open && (
-        <div className="border-t border-white/10 px-4 py-3 xl:hidden">
+        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 px-4 py-3 xl:hidden">
           {navLinks.map((l) => (
             <Link
               key={l.href}

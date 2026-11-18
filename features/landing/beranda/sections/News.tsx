@@ -24,11 +24,11 @@ export default async function News() {
         </div>
 
         {items.length > 0 ? (
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:grid sm:snap-none sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
             {items.map((item, i) => (
               <div
                 key={item.id ?? item.slug ?? item.title}
-                className="reveal-item h-full"
+                className="reveal-item w-[78%] shrink-0 snap-start sm:h-full sm:w-auto"
                 style={stagger(i, 100, 150)}
               >
                 <NewsCard item={item} />

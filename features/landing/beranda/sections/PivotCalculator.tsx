@@ -31,7 +31,7 @@ export default async function PivotCalculator() {
             <div className="reveal-left mt-6 flex flex-wrap items-center gap-4" style={delay(500)}>
               <Link
                 href="/analisa"
-                className="rounded-full bg-brand px-5 py-3 text-[13px] font-semibold hover:bg-brand/90"
+                className="w-full rounded-full bg-brand px-5 py-3 text-center text-[13px] font-semibold hover:bg-brand/90 sm:w-auto"
               >
                 Buka Kalkulator Lengkap
               </Link>

@@ -145,7 +145,7 @@ const CLASSES = {
   labels: 'pointer-events-none absolute inset-0',
   label: 'absolute left-0 top-0 whitespace-nowrap leading-[1.2] will-change-[transform,opacity]',
   caption: 'pointer-events-none absolute left-1/2 top-0 w-[min(90%,36rem)] text-left opacity-0',
-  captionText: 'm-0 mt-1.5 leading-[1.5] opacity-85',
+  captionText: 'm-0 mt-1.5 line-clamp-3 leading-[1.5] opacity-85 sm:line-clamp-none',
   close:
     'pointer-events-none absolute right-3 top-3 grid h-10 w-10 cursor-pointer place-items-center rounded-full border-0 bg-transparent p-0 text-ink opacity-0 transition-opacity duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current focus-visible:outline-solid data-[visible]:pointer-events-auto data-[visible]:opacity-80 data-[visible]:hover:opacity-100',
   hidden: 'sr-only'
@@ -622,7 +622,9 @@ const CircularGallery = ({
       const margin = Math.max(20, Math.min(view.width, view.height) * 0.06);
       const baseLabel = h * 0.072 * fontScale(fontRef.current);
       const openFrame = (item: GalleryItem): Frame => {
-        const aspect = textureFor(item.image).aspect || w / h;
+        const natural = textureFor(item.image).aspect || w / h;
+        // Layar sempit (HP): bingkai hampir persegi agar gambar tetap terlihat di atas teks.
+        const aspect = view.width < 560 ? Math.min(natural, 0.95) : natural;
         const titleSpace = 0;
         const captionSpace = 0;
         const width = Math.min(view.width - margin * 2, (view.height - margin * 2 - captionSpace) * aspect);
@@ -786,7 +788,8 @@ const CircularGallery = ({
         caption.style.font = font;
         caption.style.fontWeight = '400';
       }
-      caption.style.fontSize = `${captionSize() * 0.8}px`;
+      // Teks mengecil di bingkai sempit; di desktop nilainya tetap seperti semula.
+      caption.style.fontSize = `${clamp(metrics.openW * 0.045, 11, captionSize() * 0.8)}px`;
     };
 
     const nearest = () => Math.round(state.target / Math.max(state.spacing, 1));

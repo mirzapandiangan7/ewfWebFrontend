@@ -19,9 +19,9 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="hero-zoom object-cover"
+          className="hero-zoom object-cover object-[70%_center] lg:object-center"
         />
-        <div className="absolute inset-0 bg-linear-to-r from-navy/95 via-navy/55 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-navy/80 via-navy/60 to-navy/90 lg:bg-linear-to-r lg:from-navy/95 lg:via-navy/55 lg:to-transparent" />
         <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-navy/70 to-transparent" />
 
         <div className={`${HERO_INNER} grid items-center gap-10 lg:grid-cols-2`}>
@@ -59,10 +59,10 @@ export default function Hero() {
             </ul>
 
             <div className="hero-rise mt-7 flex flex-wrap gap-3" style={delay(950)}>
-              <SpecularLink href="/tentang-kami" variant="primary">
+              <SpecularLink href="/tentang-kami" variant="primary" className="grow sm:grow-0">
                 Kenali Kami <ArrowRight size={16} />
               </SpecularLink>
-              <SpecularLink href="/produk" variant="ghost">
+              <SpecularLink href="/produk" variant="ghost" className="grow sm:grow-0">
                 Lihat Produk <ArrowRight size={16} />
               </SpecularLink>
             </div>

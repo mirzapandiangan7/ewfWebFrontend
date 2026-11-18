@@ -59,16 +59,16 @@ export default function Profile() {
             <em>Segregated Account</em>) di bank-bank terkemuka Indonesia.
           </p>
 
-          <div className="reveal-right mt-7 flex flex-wrap gap-3" style={delay(550)}>
+          <div className="reveal-right mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap" style={delay(550)}>
             <Link
               href="/tentang-kami"
-              className="inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-[13px] font-semibold text-white transition hover:bg-navy/90"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-navy px-5 py-3 text-[13px] font-semibold text-white transition hover:bg-navy/90"
             >
               Kenali Kami Lebih Dekat <ArrowRight size={14} />
             </Link>
             <Link
               href="/tentang-kami"
-              className="inline-flex items-center gap-2 rounded-full border border-softgrey bg-white px-5 py-3 text-[13px] font-semibold text-ink transition hover:bg-softgrey/60"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-softgrey bg-white px-5 py-3 text-[13px] font-semibold text-ink transition hover:bg-softgrey/60"
             >
               <BadgeCheck size={14} className="text-bull" />
               Verifikasi Legalitas BAPPEBTI
