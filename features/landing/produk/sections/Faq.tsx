@@ -4,7 +4,7 @@ import { faqs } from "@/features/landing/produk/data";
 import { delay, stagger } from "@/lib/reveal";
 export default function Faq() {
   return (
-    <section className="mx-auto max-w-3xl px-4 pb-30 sm:px-6">
+    <section className="mx-auto max-w-3xl px-4 pb-16 sm:px-6 sm:pb-30">
       <RevealGroup threshold={0.1}>
         <div className="text-center">
           <p className="reveal-item type-label text-brand">Pertanyaan Umum</p>

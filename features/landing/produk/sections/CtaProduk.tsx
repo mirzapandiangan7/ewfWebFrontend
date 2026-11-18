@@ -6,7 +6,7 @@ export default function CtaProduk() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
       <RevealGroup>
-        <div className="reveal-zoom rounded-3xl bg-linear-to-r from-brand via-brand to-navy p-8 text-white sm:p-12">
+        <div className="reveal-zoom rounded-3xl bg-linear-to-r from-brand via-brand to-navy p-6 text-white sm:p-12">
           <h2 className="reveal-item type-h2 max-w-md" style={delay(200)}>
             Siap Mengenal Produk Kami Lebih Jauh?
           </h2>

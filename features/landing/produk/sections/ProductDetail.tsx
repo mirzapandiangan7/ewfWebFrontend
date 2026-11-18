@@ -15,16 +15,16 @@ export default function ProductDetail({ product: p, reverse }: Props) {
   return (
     <article
       id={p.slug}
-      className={`scroll-mt-24 rounded-3xl border border-black/5 p-5 shadow-xl lg:flex lg:min-h-[38rem] lg:items-center lg:p-6 ${
+      className={`scroll-mt-32 rounded-3xl border border-black/5 p-5 shadow-xl lg:flex lg:min-h-[38rem] lg:items-center lg:p-6 ${
         reverse ? "bg-softgrey" : "bg-white"
       }`}
     >
       <RevealGroup
         threshold={0.3}
-        className="grid w-full gap-8 lg:grid-cols-2 lg:items-stretch"
+        className="grid w-full gap-6 lg:grid-cols-2 lg:items-stretch lg:gap-8"
       >
         <div className={`${reverse ? "lg:order-2" : ""} ${imageFrom} lg:h-full`}>
-          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-navy lg:aspect-auto lg:h-full lg:min-h-[26rem]">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-navy md:aspect-[2/1] lg:aspect-auto lg:h-full lg:min-h-[26rem]">
             <Image
               src={p.image}
               alt={p.name}
