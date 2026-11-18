@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Calculator } from "lucide-react";
 import SlidingTabs from "@/components/ui/SlidingTabs";
 import { formatDate, formatNumber, formatSigned } from "../../../../lib/format";
@@ -127,6 +127,7 @@ export default function PivotPanel({ instruments, preset }: Props) {
     error?: string;
   } | null>(null);
 
+  const resultRef = useRef<HTMLDivElement>(null);
   const loading = request !== null && result?.id !== request.id;
 
   useEffect(() => {
@@ -152,7 +153,20 @@ export default function PivotPanel({ instruments, preset }: Props) {
           );
 
     run
-      .then((data: PivotResponse) => setResult({ id, data }))
+      .then((data: PivotResponse) => {
+        setResult({ id, data });
+
+        // HP/tablet: hasil ada di bawah form, jadi bawa pengunjung ke sana.
+        if (window.matchMedia("(max-width: 1023px)").matches) {
+          const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          requestAnimationFrame(() =>
+            resultRef.current?.scrollIntoView({
+              behavior: reduce ? "auto" : "smooth",
+              block: "start",
+            }),
+          );
+        }
+      })
       .catch((e: unknown) => {
         if (controller.signal.aborted) return;
 
@@ -278,14 +292,23 @@ export default function PivotPanel({ instruments, preset }: Props) {
         <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
           <form
             onSubmit={submit}
-            className="reveal-left space-y-4 rounded-2xl bg-softgrey p-5"
+            className="reveal-left space-y-4 rounded-2xl bg-softgrey p-4 sm:p-5"
           >
             <SlidingTabs
+              fill
               ariaLabel="Sumber data"
               value={mode}
               onChange={setMode}
               options={[
-                { value: "historis", label: "Dari Data Historis" },
+                {
+                  value: "historis",
+                  label: (
+                    <>
+                      <span className="sm:hidden">Data Historis</span>
+                      <span className="hidden sm:inline">Dari Data Historis</span>
+                    </>
+                  ),
+                },
                 { value: "manual", label: "Input Manual" },
               ]}
             />
@@ -366,16 +389,16 @@ export default function PivotPanel({ instruments, preset }: Props) {
             <button
               type="submit"
               disabled={loading || upToDate}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-brand/90 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               <Calculator size={14} />
               {loading ? "Menghitung…" : "Hitung Pivot Point"}
             </button>
           </form>
 
-          <div className="reveal-right">
+          <div ref={resultRef} className="reveal-right scroll-mt-24">
             {!request ? (
-              <div className="grid min-h-80 place-items-center rounded-2xl border border-dashed border-softgrey bg-surface p-8 text-center">
+              <div className="grid min-h-56 place-items-center rounded-2xl border border-dashed border-softgrey bg-surface p-8 text-center sm:min-h-80">
                 <div>
                   <Calculator size={28} className="mx-auto text-muted" />
 
@@ -399,7 +422,7 @@ export default function PivotPanel({ instruments, preset }: Props) {
                 </p>
               </div>
             ) : !data ? (
-              <div className="h-80 animate-pulse rounded-2xl bg-surface" />
+              <div className="h-64 animate-pulse rounded-2xl bg-surface sm:h-80" />
             ) : (
               <div
                 key={result?.id}

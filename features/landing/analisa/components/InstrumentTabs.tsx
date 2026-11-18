@@ -19,7 +19,7 @@ export default function InstrumentTabs({ instruments, value, onChange }: Props) 
         </p>
       </div>
 
-      <div className="max-w-full overflow-x-auto">
+      <div className="-mx-1 max-w-full overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {instruments.length === 0 ? (
           <div className="h-11 w-[26rem] max-w-full animate-pulse rounded-full bg-softgrey" />
         ) : (

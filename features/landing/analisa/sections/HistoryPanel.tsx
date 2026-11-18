@@ -92,7 +92,7 @@ export default function HistoryPanel({ instruments, active, onPivot }: Props) {
   const canReset = !loading && (hasFilter || !sameRange);
 
   return (
-    <div className="rounded-3xl border border-softgrey bg-white p-5 shadow-sm sm:p-8">
+    <div className="rounded-3xl border border-softgrey bg-white p-4 shadow-sm sm:p-8">
       <RevealGroup threshold={0.1}>
         <div className="reveal-item flex flex-wrap items-end justify-between gap-4 border-b border-softgrey pb-6">
           <div>
@@ -106,7 +106,7 @@ export default function HistoryPanel({ instruments, active, onPivot }: Props) {
             </p>
           </div>
 
-          <p className="flex items-center gap-2 text-xs text-muted">
+          <p className="flex flex-wrap items-center gap-2 text-xs text-muted">
             Status Data:
             <span
               className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold ${

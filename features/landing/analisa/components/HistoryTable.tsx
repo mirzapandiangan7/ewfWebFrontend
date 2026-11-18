@@ -60,7 +60,7 @@ export default function HistoryTable({ rows, meta, loading, toolbar, onPivot, on
 
       {toolbar && <div className="mt-4">{toolbar}</div>}
 
-      <div className="mt-4 overflow-x-auto rounded-2xl border border-softgrey">
+      <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-softgrey lg:block">
         <table className="w-full min-w-[800px] table-fixed text-[13px]">
           <colgroup>
             <col className="w-[18%]" />
@@ -130,23 +130,94 @@ export default function HistoryTable({ rows, meta, loading, toolbar, onPivot, on
         </table>
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+      {/* HP & tablet: daftar kartu */}
+      <ul className="mt-4 grid gap-3 md:grid-cols-2 lg:hidden" aria-busy={loading}>
+        {loading ? (
+          Array.from({ length: 4 }, (_, i) => (
+            <li key={i} className="h-44 animate-pulse rounded-2xl bg-surface" />
+          ))
+        ) : rows.length === 0 ? (
+          <li className="rounded-2xl border border-softgrey px-4 py-10 text-center text-[13px] text-muted md:col-span-2">
+            Belum ada data untuk rentang tanggal ini.
+          </li>
+        ) : (
+          rows.map((r, i) => {
+            const up = (r.change_percent ?? 0) > 0;
+            const down = (r.change_percent ?? 0) < 0;
+            const cells = [
+              ["Open", r.open],
+              ["High", r.high],
+              ["Low", r.low],
+              ["Close", r.close],
+            ] as const;
+
+            return (
+              <li
+                key={r.date}
+                className="row-in rounded-2xl border border-softgrey p-4"
+                style={{ "--row-delay": `${Math.min(i, 8) * 40}ms` } as CSSProperties}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-semibold text-ink">{formatDate(r.date)}</p>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                      up
+                        ? "bg-bull/10 text-bull"
+                        : down
+                          ? "bg-bear/10 text-bear"
+                          : "bg-softgrey text-muted"
+                    }`}
+                  >
+                    {formatPercent(r.change_percent)}
+                  </span>
+                </div>
+
+                <dl className="mt-3 grid grid-cols-2 gap-2 text-[13px]">
+                  {cells.map(([name, value]) => (
+                    <div
+                      key={name}
+                      className="flex items-baseline justify-between gap-2 rounded-lg bg-softgrey/60 px-3 py-2"
+                    >
+                      <dt className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted">
+                        {name}
+                      </dt>
+                      <dd className="font-semibold tabular-nums text-ink">{formatNumber(value)}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <button
+                  type="button"
+                  onClick={() => onPivot(r.date)}
+                  className="mt-3 w-full rounded-xl bg-brand/10 py-2.5 text-[13px] font-semibold text-brand transition active:bg-brand active:text-white"
+                >
+                  Hitung Pivot
+                </button>
+              </li>
+            );
+          })
+        )}
+      </ul>
+
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <p className="type-micro text-muted lg:whitespace-nowrap">
           Data bersumber dari sistem bursa resmi JFX & KBI. Data bersifat historis dan bukan
           jaminan pergerakan di masa depan.
         </p>
 
-        {meta ? (
-          meta.last_page > 1 && (
-            <HistoryPagination
-              current={meta.current_page}
-              last={meta.last_page}
-              onChange={onPage}
-            />
-          )
-        ) : (
-          loading && <div className="h-10 w-56 animate-pulse rounded-full bg-surface" />
-        )}
+        <div className="flex justify-center sm:justify-end">
+          {meta ? (
+            meta.last_page > 1 && (
+              <HistoryPagination
+                current={meta.current_page}
+                last={meta.last_page}
+                onChange={onPage}
+              />
+            )
+          ) : (
+            loading && <div className="h-10 w-56 animate-pulse rounded-full bg-surface" />
+          )}
+        </div>
       </div>
     </div>
   );

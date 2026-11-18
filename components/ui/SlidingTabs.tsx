@@ -23,12 +23,14 @@ type Props<T extends string> = {
    * track   = pilihan sekunder: landasan abu-abu lembut, pill oranye, tanpa bayangan tebal
    */
   variant?: "pill" | "segment" | "soft" | "track";
+  /** true = di HP selebar penuh dan tiap pilihan sama lebar; di layar ≥ sm kembali ke ukuran isi */
+  fill?: boolean;
 };
 
 const STYLES = {
   pill: {
     root: "rounded-full bg-white p-1.5 shadow-lg",
-    item: "gap-2 rounded-full px-5 py-2.5 text-[13px]",
+    item: "gap-2 rounded-full px-4 py-2.5 text-[13px] sm:px-5",
     indicator: "rounded-full bg-brand shadow-sm",
     active: "text-white",
     activeFallback: "bg-brand",
@@ -66,6 +68,7 @@ export default function SlidingTabs<T extends string>({
   onChange,
   ariaLabel,
   variant = "segment",
+  fill = false,
 }: Props<T>) {
   const styles = STYLES[variant];
   const isTabs = variant === "pill";
@@ -127,7 +130,7 @@ export default function SlidingTabs<T extends string>({
       ref={rootRef}
       role={isTabs ? "tablist" : "group"}
       aria-label={ariaLabel}
-      className={`relative inline-flex ${styles.root}`}
+      className={`relative ${fill ? "flex w-full sm:inline-flex sm:w-auto" : "inline-flex"} ${styles.root}`}
     >
       <span
         ref={indicatorRef}
@@ -148,7 +151,7 @@ export default function SlidingTabs<T extends string>({
             aria-selected={isTabs ? active : undefined}
             aria-pressed={isTabs ? undefined : active}
             onClick={() => onChange(option.value)}
-            className={`relative z-10 inline-flex items-center justify-center font-semibold transition-colors duration-300 ${styles.item} ${
+            className={`relative z-10 inline-flex items-center justify-center whitespace-nowrap font-semibold transition-colors duration-300 ${styles.item} ${fill ? "flex-1 sm:flex-none" : ""} ${
               active
                 ? ready
                   ? styles.active

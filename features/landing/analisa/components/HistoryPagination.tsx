@@ -71,7 +71,7 @@ export default function HistoryPagination({ current, last, onChange }: Props) {
   return (
     <nav
       aria-label="Halaman data historis"
-      className="inline-flex items-center gap-2 rounded-full bg-white px-1.5 py-1 shadow-lg ring-1 ring-softgrey"
+      className="inline-flex max-w-full items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-lg ring-1 ring-softgrey sm:gap-2"
     >
       <button
         type="button"

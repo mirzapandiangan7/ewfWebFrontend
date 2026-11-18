@@ -6,7 +6,7 @@ export default function CtaAnalisa() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6">
       <RevealGroup>
-        <div className="reveal-zoom grid items-center gap-6 rounded-3xl bg-linear-to-r from-brand via-brand to-navy p-8 text-white sm:p-12 lg:grid-cols-[1.4fr_1fr]">
+        <div className="reveal-zoom grid items-center gap-6 rounded-3xl bg-linear-to-r from-brand via-brand to-navy p-6 text-white sm:p-12 lg:grid-cols-[1.4fr_1fr]">
           <div>
             <h2 className="reveal-item type-h2" style={delay(150)}>
               Ingin Berdiskusi Tentang Analisa Pasar?

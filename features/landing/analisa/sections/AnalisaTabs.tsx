@@ -54,6 +54,7 @@ export default function AnalisaTabs() {
         <div className="reveal-zoom flex justify-center">
             <SlidingTabs
               variant="pill"
+              fill
               ariaLabel="Alat analisa"
               value={tab}
               onChange={go}
@@ -69,7 +70,7 @@ export default function AnalisaTabs() {
           </div>
       </RevealGroup>
 
-      <div className="mt-8">
+      <div className="mt-6 sm:mt-8">
         {/* Kedua panel tetap terpasang agar filter dan hasil tidak hilang saat berpindah tab */}
         <div hidden={tab !== "history"}>
           <HistoryPanel instruments={instruments} active={tab === "history"} onPivot={openPivot} />

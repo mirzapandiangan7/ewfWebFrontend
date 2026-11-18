@@ -30,7 +30,7 @@ export default function FilterBar({
 }: Props) {
   return (
     <form
-      className="grid gap-4 rounded-2xl bg-softgrey p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end"
+      className="grid gap-4 rounded-2xl bg-softgrey p-3 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end"
       onSubmit={(e) => {
         e.preventDefault();
         onApply();
@@ -57,12 +57,12 @@ export default function FilterBar({
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
         <button
           type="submit"
           disabled={!canApply}
           title={canApply ? undefined : "Ubah rentang tanggal untuk menerapkan filter"}
-          className={`inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-[13px] font-semibold text-white transition enabled:hover:bg-brand/90 ${disabledStyle}`}
+          className={`col-span-2 inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-[13px] font-semibold text-white transition enabled:hover:bg-brand/90 sm:col-span-1 ${disabledStyle}`}
         >
           <Filter size={14} /> Terapkan
         </button>
@@ -70,13 +70,13 @@ export default function FilterBar({
           type="button"
           onClick={onReset}
           disabled={!canReset}
-          className={`inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[13px] font-semibold text-ink transition enabled:hover:bg-white/70 ${disabledStyle}`}
+          className={`inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[13px] font-semibold text-ink transition enabled:hover:bg-white/70 ${disabledStyle}`}
         >
           <RotateCcw size={14} /> Reset
         </button>
         <a
           href={exportHref}
-          className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[13px] font-semibold text-ink transition hover:bg-white/70"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-[13px] font-semibold text-ink transition hover:bg-white/70"
         >
           <Download size={14} /> Export CSV
         </a>
