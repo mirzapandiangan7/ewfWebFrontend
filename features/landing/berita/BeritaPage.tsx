@@ -33,8 +33,8 @@ export default async function BeritaPage({ page, sort }: Props) {
       {news && items.length > 0 ? (
         <NewsGrid items={items} meta={news.meta} sort={sort} />
       ) : (
-        <section id="semua-berita" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
-          <div className="rounded-3xl border border-softgrey bg-white p-10 text-center">
+        <section id="semua-berita" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-12 sm:px-6 sm:pt-16">
+          <div className="rounded-3xl border border-softgrey bg-white p-6 text-center sm:p-10">
             <p className="font-display text-lg font-bold text-ink">
               {news ? "Halaman berita tidak ditemukan." : "Berita belum bisa dimuat saat ini."}
             </p>

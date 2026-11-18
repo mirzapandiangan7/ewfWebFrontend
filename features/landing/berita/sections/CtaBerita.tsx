@@ -6,7 +6,7 @@ export default function CtaBerita() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-20 pt-16 sm:px-6">
       <RevealGroup>
-        <div className="reveal-zoom rounded-3xl bg-linear-to-r from-brand via-brand to-navy p-8 text-white sm:p-12">
+        <div className="reveal-zoom rounded-3xl bg-linear-to-r from-brand via-brand to-navy p-6 text-white sm:p-12">
           <h2 className="reveal-item type-h2 max-w-xl" style={delay(150)}>
             Ingin Memahami Dampak Berita pada Pergerakan Pasar?
           </h2>

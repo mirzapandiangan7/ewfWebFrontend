@@ -75,13 +75,13 @@ export default function Pagination({ current, last, sort }: Props) {
     if (page !== shown) setTarget(page);
   };
 
-  const arrow = "grid h-8 w-8 place-items-center rounded-full transition-colors";
+  const arrow = "grid h-9 w-9 place-items-center rounded-full transition-colors sm:h-8 sm:w-8";
   const pages = Array.from({ length: last }, (_, i) => i + 1);
 
   return (
     <nav
       aria-label="Halaman berita"
-      className="inline-flex items-center gap-2 rounded-full bg-white px-1.5 py-1 shadow-lg"
+      className="inline-flex max-w-full items-center gap-1 rounded-full bg-white px-1.5 py-1 shadow-lg sm:gap-2"
     >
       {shown > 1 ? (
         <Link
@@ -115,7 +115,7 @@ export default function Pagination({ current, last, sort }: Props) {
                 href={pageHref(p)}
                 onClick={choose(p)}
                 aria-current={p === shown ? "page" : undefined}
-                className={`grid h-8 min-w-8 place-items-center px-1 text-sm font-semibold transition-colors duration-300 ${
+                className={`grid h-9 min-w-9 place-items-center px-1 text-sm font-semibold transition-colors duration-300 sm:h-8 sm:min-w-8 ${
                   p === shown ? "text-ink" : "text-muted hover:text-ink"
                 }`}
               >

@@ -27,7 +27,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
       className="reveal-item group flex h-full flex-col rounded-2xl bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
       style={delay((index % 3) * 110)}
     >
-      <div className="relative h-44 overflow-hidden rounded-xl bg-navy">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-navy sm:aspect-auto sm:h-44">
         <NewsImage
           src={item.image}
           sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw"
@@ -63,7 +63,7 @@ export default function NewsGrid({ items, meta, sort }: Props) {
   const last = Math.min(meta.last_page, MAX_PAGES);
 
   return (
-    <section id="semua-berita" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-16 sm:px-6">
+    <section id="semua-berita" className="mx-auto max-w-7xl scroll-mt-28 px-4 pt-12 sm:px-6 sm:pt-16">
       <RevealGroup threshold={0.1}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="reveal-item">
@@ -73,21 +73,21 @@ export default function NewsGrid({ items, meta, sort }: Props) {
             </p>
           </div>
           <div
-            className="reveal-item flex items-center gap-2 text-xs text-muted"
+            className="reveal-item flex w-full items-center gap-2 text-xs text-muted sm:w-auto"
             style={delay(120)}
           >
             <span id="urutkan-label">Urutkan:</span>
             <div
               role="group"
               aria-labelledby="urutkan-label"
-              className="inline-flex rounded-lg border border-softgrey bg-white p-1"
+              className="flex flex-1 rounded-lg border border-softgrey bg-white p-1 sm:inline-flex sm:flex-none"
             >
               {SORT_OPTIONS.map((o) => (
                 <Link
                   key={o.value}
                   href={newsHref(1, o.value, "berita-terbaru")}
                   aria-current={o.value === sort ? "true" : undefined}
-                  className={`rounded-md px-3.5 py-1.5 font-semibold transition-colors ${
+                  className={`flex-1 rounded-md px-3.5 py-2.5 text-center font-semibold transition-colors sm:flex-none sm:py-1.5 ${
                     o.value === sort ? "bg-navy text-white" : "text-muted hover:text-ink"
                   }`}
                 >
@@ -99,7 +99,7 @@ export default function NewsGrid({ items, meta, sort }: Props) {
         </div>
       </RevealGroup>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
         {items.map((item, i) => (
           <RevealGroup
             key={item.id ?? item.slug ?? item.title}
@@ -112,7 +112,7 @@ export default function NewsGrid({ items, meta, sort }: Props) {
       </div>
 
       {last > 1 && (
-        <RevealGroup className="mt-10 flex justify-end">
+        <RevealGroup className="mt-8 flex justify-center sm:mt-10 sm:justify-end">
           <div className="reveal-item">
             <Pagination current={current} last={last} sort={sort} />
           </div>
