@@ -249,18 +249,35 @@ main {
   background: linear-gradient(225deg, #120803 0%, #6f330b 28%, #ec7013 52%, #6f330b 76%, #160a03 100%);
 }
 
-/* Kilau cahaya pelan di atas panel */
-.auth-sheen::after {
+/* Kilau cahaya: sejajar dengan pita oranye tiap sisi dan bergerak berlawanan arah */
+.auth-cover-a,
+.auth-cover-b {
+  overflow: hidden;
+}
+.auth-cover-a::after,
+.auth-cover-b::after {
   content: "";
   position: absolute;
   inset: -40%;
-  background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 0.1) 50%, transparent 58%);
-  animation: auth-sheen 9s ease-in-out infinite;
   pointer-events: none;
 }
-@keyframes auth-sheen {
-  0%, 100% { transform: translateX(-25%); }
-  50% { transform: translateX(25%); }
+/* Sisi Daftar: pita naik ke kanan, kilau menyapu ke kanan-bawah */
+.auth-cover-a::after {
+  background: linear-gradient(135deg, transparent 42%, rgb(255 255 255 / 0.12) 50%, transparent 58%);
+  animation: auth-sheen-a 9s ease-in-out infinite;
+}
+/* Sisi Masuk: pita turun ke kanan, kilau menyapu ke kiri-bawah */
+.auth-cover-b::after {
+  background: linear-gradient(225deg, transparent 42%, rgb(255 255 255 / 0.12) 50%, transparent 58%);
+  animation: auth-sheen-b 9s ease-in-out infinite;
+}
+@keyframes auth-sheen-a {
+  0%, 100% { transform: translate(-22%, -22%); }
+  50% { transform: translate(22%, 22%); }
+}
+@keyframes auth-sheen-b {
+  0%, 100% { transform: translate(22%, -22%); }
+  50% { transform: translate(-22%, 22%); }
 }
 
 .auth-float { animation: auth-float 6s ease-in-out infinite; }
@@ -294,7 +311,8 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth-sheen::after,
+  .auth-cover-a::after,
+  .auth-cover-b::after,
   .auth-float,
   .auth-shake {
     animation: none;
