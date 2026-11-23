@@ -95,11 +95,6 @@ main {
 .product-stack::-webkit-scrollbar {
   display: none;                /* Chrome, Safari, Edge */
 }
-.product-stack .scroll-stack-inner {
-  padding-left: 1.25rem;        /* bawaan 5rem; sisakan sedikit untuk bayangan */
-  padding-right: 1.25rem;
-  padding-top: 2rem;            /* bawaan 20vh */
-}
 
 /* ===== Footer: garis cahaya & animasi muncul bertahap ===== */
 @keyframes footer-line {
