@@ -1,5 +1,5 @@
 import { Download, Filter, RotateCcw } from "lucide-react";
-import type { Filters } from "../types";
+import type { Filters } from "../../../shared/market/types";
 import DatePicker from "@/components/ui/DatePicker";
 
 type Props = {
