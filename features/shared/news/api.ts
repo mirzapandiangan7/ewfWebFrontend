@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import { MAX_PAGES } from "./constants";
+import { MAX_PAGES } from "../../landing/berita/constants";
 import type { NewsResponse } from "./types";
 
 export function getNews(page: number) {
