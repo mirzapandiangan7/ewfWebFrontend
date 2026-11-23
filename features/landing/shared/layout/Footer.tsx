@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Mail, MessageCircle, Phone, ShieldAlert } from "lucide-react";
 import BackToTop from "@/components/ui/BackToTop";
