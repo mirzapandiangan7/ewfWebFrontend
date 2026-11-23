@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Mail, MessageCircle, Phone, ShieldAlert } from "lucide-react";
 import BackToTop from "@/components/ui/BackToTop";
 import RevealGroup from "@/components/ui/RevealGroup";
-import { WHATSAPP_URL } from "@/features/landing/shared/data/contact";
+import { WHATSAPP_URL } from "@/lib/contact";
 import { navLinks } from "@/features/landing/shared/data/nav";
 import { delay } from "@/lib/reveal";
 
